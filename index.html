@@ -432,6 +432,9 @@ td{padding:9px 12px;color:rgba(255,255,255,0.78)}
 }
 .admin-lock-btn:hover{background:rgba(124,77,255,0.12);color:rgba(200,180,255,0.9)}
 .admin-empty{text-align:center;padding:24px;color:rgba(200,180,255,0.3);font-size:0.82rem}
+.admin-tab-btn{background:rgba(255,255,255,0.04);border:1.5px solid rgba(180,140,255,0.12);border-radius:9px;color:rgba(200,180,255,0.5);font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:600;padding:7px 14px;cursor:pointer;transition:all .2s}
+.admin-tab-btn:hover{background:rgba(124,77,255,0.1);color:rgba(200,180,255,0.8)}
+.admin-tab-btn.active{background:rgba(124,77,255,0.22);border-color:rgba(180,140,255,0.35);color:rgba(220,200,255,1)}
 
 </style>
 </head>
@@ -827,7 +830,7 @@ td{padding:9px 12px;color:rgba(255,255,255,0.78)}
         <div class="panel-header">
           <div class="panel-tag">Admin</div>
           <div class="panel-title">Authorization Manager</div>
-          <div class="panel-sub">Manage which Employee IDs can access Email Productivity and Case Submission.</div>
+          <div class="panel-sub">Manage Admin Users, Portal Users and Restricted Users — all synced to Airtable instantly.</div>
         </div>
 
         <!-- Admin PIN gate -->
@@ -841,7 +844,7 @@ td{padding:9px 12px;color:rgba(255,255,255,0.78)}
           <div style="margin-top:12px;font-size:0.72rem;color:rgba(200,180,255,0.4);text-align:center">PIN is set by the admin — contact your system admin if locked out.</div>
         </div>
 
-        <!-- Admin dashboard (hidden until PIN verified) -->
+        <!-- Admin dashboard -->
         <div id="admin-dashboard" style="display:none">
 
           <!-- Change PIN -->
@@ -860,32 +863,79 @@ td{padding:9px 12px;color:rgba(255,255,255,0.78)}
             <button class="f-btn" style="margin-top:4px" onclick="changeAdminPin()">Update PIN &nbsp;→</button>
           </div>
 
-          <!-- Authorized Employee IDs -->
+          <!-- 3-tab user management -->
           <div class="f-card">
-            <div class="f-section-title" style="display:flex;align-items:center;justify-content:space-between">
-              <span>Authorized Employee IDs</span>
-              <span id="emp-count" style="background:rgba(124,77,255,0.18);color:rgba(180,140,255,0.9);font-size:0.7rem;padding:2px 10px;border-radius:20px;font-weight:700">0</span>
+            <!-- Tab buttons -->
+            <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid rgba(180,140,255,0.12);padding-bottom:14px">
+              <button class="admin-tab-btn active" id="tab-btn-admins"   onclick="switchAdminTab('admins')">👑 Admin Users</button>
+              <button class="admin-tab-btn"        id="tab-btn-users"    onclick="switchAdminTab('users')">👤 Portal Users</button>
+              <button class="admin-tab-btn"        id="tab-btn-restricted" onclick="switchAdminTab('restricted')">🔒 Restricted Users</button>
             </div>
-            <div class="f-field-row" style="margin-bottom:10px">
-              <div>
-                <label class="f-label">Employee ID</label>
-                <input class="f-input" type="text" id="new-emp-id" placeholder="e.g. EMP001" autocomplete="off"/>
-              </div>
-              <div>
-                <label class="f-label">Name (optional)</label>
-                <input class="f-input" type="text" id="new-emp-name" placeholder="e.g. John Doe" autocomplete="off"/>
-              </div>
-            </div>
-            <button class="f-btn" style="margin-bottom:18px" onclick="addAuthorizedEmp()">Add Employee &nbsp;→</button>
 
-            <div id="emp-list" class="admin-emp-list"></div>
-
-            <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(180,140,255,0.1);display:flex;gap:10px">
-              <button class="admin-danger-btn" onclick="clearAllEmps()">Clear All</button>
-              <button class="admin-lock-btn" onclick="lockAdmin()">Lock Admin</button>
+            <!-- TAB: Admin Users -->
+            <div id="tab-admins">
+              <div style="font-size:0.75rem;color:rgba(200,180,255,0.45);margin-bottom:12px">Can log in without being in Portal Users. Can access Admin panel.</div>
+              <div class="f-field-row" style="margin-bottom:10px">
+                <div>
+                  <label class="f-label">Employee ID</label>
+                  <input class="f-input" type="text" id="new-admin-id" placeholder="e.g. RM7028777" autocomplete="off"/>
+                </div>
+                <div>
+                  <label class="f-label">Name (optional)</label>
+                  <input class="f-input" type="text" id="new-admin-name" placeholder="e.g. John Doe" autocomplete="off"/>
+                </div>
+              </div>
+              <button class="f-btn" style="margin-bottom:18px" onclick="addAuthorizedEmp()">Add Admin &nbsp;→</button>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <span style="font-size:0.8rem;color:rgba(200,180,255,0.6)">Admin Employees</span>
+                <span id="emp-count" style="background:rgba(124,77,255,0.18);color:rgba(180,140,255,0.9);font-size:0.7rem;padding:2px 10px;border-radius:20px;font-weight:700">0</span>
+              </div>
+              <div id="emp-list" class="admin-emp-list"></div>
+              <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(180,140,255,0.1);display:flex;gap:10px">
+                <button class="admin-danger-btn" onclick="clearAllEmps()">Clear All Admins</button>
+                <button class="admin-lock-btn" onclick="lockAdmin()">Lock Admin</button>
+              </div>
             </div>
+
+            <!-- TAB: Portal Users -->
+            <div id="tab-users" style="display:none">
+              <div style="font-size:0.75rem;color:rgba(200,180,255,0.45);margin-bottom:12px">These employees can log in to the portal. Access: Escalation &amp; Websites only.</div>
+              <div class="f-field-row" style="margin-bottom:10px">
+                <div>
+                  <label class="f-label">Employee ID</label>
+                  <input class="f-input" type="text" id="new-user-id" placeholder="e.g. RM7033055" autocomplete="off"/>
+                </div>
+                <div>
+                  <label class="f-label">Name</label>
+                  <input class="f-input" type="text" id="new-user-name" placeholder="e.g. Ankit Rawat" autocomplete="off"/>
+                </div>
+              </div>
+              <button class="f-btn" style="margin-bottom:18px" onclick="addPortalUser()">Add User &nbsp;→</button>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <span style="font-size:0.8rem;color:rgba(200,180,255,0.6)">Portal Users</span>
+                <span id="users-count" style="background:rgba(124,77,255,0.18);color:rgba(180,140,255,0.9);font-size:0.7rem;padding:2px 10px;border-radius:20px;font-weight:700">0</span>
+              </div>
+              <div id="users-list" class="admin-emp-list"></div>
+            </div>
+
+            <!-- TAB: Restricted Users -->
+            <div id="tab-restricted" style="display:none">
+              <div style="font-size:0.75rem;color:rgba(200,180,255,0.45);margin-bottom:12px">These employees also get access to Email Productivity &amp; Case Submission forms.</div>
+              <div class="f-field-row" style="margin-bottom:10px">
+                <div>
+                  <label class="f-label">Employee ID</label>
+                  <input class="f-input" type="text" id="new-restr-id" placeholder="e.g. RM7032569" autocomplete="off"/>
+                </div>
+              </div>
+              <button class="f-btn" style="margin-bottom:18px" onclick="addRestrictedUser()">Add &nbsp;→</button>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <span style="font-size:0.8rem;color:rgba(200,180,255,0.6)">Restricted Users</span>
+                <span id="restr-count" style="background:rgba(124,77,255,0.18);color:rgba(180,140,255,0.9);font-size:0.7rem;padding:2px 10px;border-radius:20px;font-weight:700">0</span>
+              </div>
+              <div id="restr-list" class="admin-emp-list"></div>
+            </div>
+
           </div>
-
         </div>
       </div>
 
@@ -1245,6 +1295,18 @@ function escToast(icon, msg) {
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 /* ===============================================
+   ADMIN — TAB SWITCHING
+================================================ */
+function switchAdminTab(tab) {
+  ['admins','users','restricted'].forEach(function(t) {
+    document.getElementById('tab-' + t).style.display = 'none';
+    document.getElementById('tab-btn-' + t).classList.remove('active');
+  });
+  document.getElementById('tab-' + tab).style.display = 'block';
+  document.getElementById('tab-btn-' + tab).classList.add('active');
+}
+
+/* ===============================================
    ADMIN — PIN VERIFY / CHANGE
 ================================================ */
 function getAdminPin() { return _cloudPin; }
@@ -1256,6 +1318,8 @@ function verifyAdminPin() {
     document.getElementById('admin-gate').style.display = 'none';
     document.getElementById('admin-dashboard').style.display = 'block';
     renderEmpList();
+    renderUsersList();
+    renderRestrictedList();
     pToast('Admin unlocked', 'ok');
   } else {
     pToast('Incorrect PIN', 'err');
@@ -1269,11 +1333,9 @@ function changeAdminPin() {
   if (!np) { pToast('Enter a new PIN', 'err'); return; }
   if (np !== cp) { pToast('PINs do not match', 'err'); return; }
   _cloudPin = np;
-  // Save new PIN to Airtable Config record
   if (_configRecordId) {
     fetch(AT_URL_CONFIG + '/' + _configRecordId, {
-      method: 'PATCH',
-      headers: atHeaders(),
+      method: 'PATCH', headers: atHeaders(),
       body: JSON.stringify({ fields: { Pin: np } })
     }).then(function(){ pToast('PIN updated & synced ✓', 'ok'); })
       .catch(function(){ pToast('PIN changed locally but sync failed', 'err'); });
@@ -1283,41 +1345,39 @@ function changeAdminPin() {
 }
 
 /* ===============================================
-   ADMIN — MANAGE AUTHORIZED ADMIN EMP IDs
-   (stored in Config table emps column)
+   ADMIN TAB — ADMIN USERS (Config.Emp column)
 ================================================ */
-function getAuthorizedEmps()  { return _cloudEmps; }
+function getAuthorizedEmps() { return _cloudEmps; }
 
 function saveAdminEmpsToAirtable() {
   if (!_configRecordId) return;
   var empStr = _cloudEmps.map(function(e){ return e.id; }).join(',');
   fetch(AT_URL_CONFIG + '/' + _configRecordId, {
-    method: 'PATCH',
-    headers: atHeaders(),
+    method: 'PATCH', headers: atHeaders(),
     body: JSON.stringify({ fields: { Emp: empStr } })
   }).catch(function(err){ console.warn('Admin emp sync failed:', err); });
 }
 
 function addAuthorizedEmp() {
-  var id   = document.getElementById('new-emp-id').value.trim().toUpperCase();
-  var name = document.getElementById('new-emp-name').value.trim();
+  var id   = document.getElementById('new-admin-id').value.trim().toUpperCase();
+  var name = document.getElementById('new-admin-name').value.trim();
   if (!id) { pToast('Enter an Employee ID', 'err'); return; }
   if (_cloudEmps.some(function(e){ return e.id.toLowerCase() === id.toLowerCase(); })) {
-    pToast('Employee ID already in admin list', 'err'); return;
+    pToast('Already in admin list', 'err'); return;
   }
   _cloudEmps.push({ id: id, name: name || '' });
   saveAdminEmpsToAirtable();
-  document.getElementById('new-emp-id').value = '';
-  document.getElementById('new-emp-name').value = '';
+  document.getElementById('new-admin-id').value = '';
+  document.getElementById('new-admin-name').value = '';
   renderEmpList();
-  pToast('Admin employee added & synced ✓', 'ok');
+  pToast('Admin added & synced ✓', 'ok');
 }
 
 function removeAuthorizedEmp(id) {
   _cloudEmps = _cloudEmps.filter(function(e){ return e.id !== id; });
   saveAdminEmpsToAirtable();
   renderEmpList();
-  pToast('Admin employee removed & synced ✓', 'ok');
+  pToast('Admin removed & synced ✓', 'ok');
 }
 
 function clearAllEmps() {
@@ -1325,28 +1385,109 @@ function clearAllEmps() {
   _cloudEmps = [];
   saveAdminEmpsToAirtable();
   renderEmpList();
-  pToast('All admin employees cleared & synced ✓', 'ok');
+  pToast('All admins cleared & synced ✓', 'ok');
 }
 
 function renderEmpList() {
-  var list = getAuthorizedEmps();
+  var list = _cloudEmps;
   var container = document.getElementById('emp-list');
   document.getElementById('emp-count').textContent = list.length;
-  if (list.length === 0) {
-    container.innerHTML = '<div class="admin-empty">No admin employees added yet.</div>';
-    return;
-  }
+  if (!list.length) { container.innerHTML = '<div class="admin-empty">No admin employees yet.</div>'; return; }
   container.innerHTML = list.map(function(e) {
-    return '<div class="admin-emp-row">' +
-      '<div class="admin-emp-info">' +
-        '<div class="admin-emp-id">' + e.id + '</div>' +
-        (e.name ? '<div class="admin-emp-name">' + e.name + '</div>' : '') +
-      '</div>' +
-      '<button class="admin-remove-btn" onclick="removeAuthorizedEmp(\'' + e.id + '\')">Remove</button>' +
-    '</div>';
+    return '<div class="admin-emp-row"><div class="admin-emp-info"><div class="admin-emp-id">' + e.id + '</div>' +
+      (e.name ? '<div class="admin-emp-name">' + e.name + '</div>' : '') + '</div>' +
+      '<button class="admin-remove-btn" data-action="remove-admin" data-id="' + e.id + '">Remove</button></div>';
   }).join('');
 }
 
+/* ===============================================
+   ADMIN TAB — PORTAL USERS (Users table)
+================================================ */
+function addPortalUser() {
+  var id   = document.getElementById('new-user-id').value.trim().toUpperCase();
+  var name = document.getElementById('new-user-name').value.trim();
+  if (!id)   { pToast('Enter an Employee ID', 'err'); return; }
+  if (!name) { pToast('Enter a name', 'err'); return; }
+  if (_allUsers.some(function(u){ return u.empId.toLowerCase() === id.toLowerCase(); })) {
+    pToast('Already in portal users', 'err'); return;
+  }
+  var btn = document.getElementById('new-user-id').closest('.f-card') || document;
+  fetch(AT_URL_USERS, {
+    method: 'POST', headers: atHeaders(),
+    body: JSON.stringify({ fields: { empId: id, name: name } })
+  }).then(function(r){ return r.json(); })
+    .then(function(rec) {
+      _allUsers.push({ empId: id, name: name, recordId: rec.id });
+      document.getElementById('new-user-id').value = '';
+      document.getElementById('new-user-name').value = '';
+      renderUsersList();
+      pToast('Portal user added & synced ✓', 'ok');
+    }).catch(function(){ pToast('Failed to add user', 'err'); });
+}
+
+function removePortalUser(recordId, empId) {
+  fetch(AT_URL_USERS + '/' + recordId, { method: 'DELETE', headers: atHeaders() })
+    .then(function() {
+      _allUsers = _allUsers.filter(function(u){ return u.recordId !== recordId; });
+      renderUsersList();
+      pToast('Portal user removed & synced ✓', 'ok');
+    }).catch(function(){ pToast('Failed to remove user', 'err'); });
+}
+
+function renderUsersList() {
+  var container = document.getElementById('users-list');
+  document.getElementById('users-count').textContent = _allUsers.length;
+  if (!_allUsers.length) { container.innerHTML = '<div class="admin-empty">No portal users yet.</div>'; return; }
+  container.innerHTML = _allUsers.map(function(u) {
+    return '<div class="admin-emp-row"><div class="admin-emp-info"><div class="admin-emp-id">' + u.empId + '</div>' +
+      (u.name ? '<div class="admin-emp-name">' + u.name + '</div>' : '') + '</div>' +
+      '<button class="admin-remove-btn" data-action="remove-user" data-id="' + u.recordId + '">Remove</button></div>';
+  }).join('');
+}
+
+/* ===============================================
+   ADMIN TAB — RESTRICTED USERS (RestrictedUsers table)
+================================================ */
+function addRestrictedUser() {
+  var id = document.getElementById('new-restr-id').value.trim().toUpperCase();
+  if (!id) { pToast('Enter an Employee ID', 'err'); return; }
+  if (_restrictedEmps.some(function(u){ return u.empId.toLowerCase() === id.toLowerCase(); })) {
+    pToast('Already in restricted users', 'err'); return;
+  }
+  fetch(AT_URL_RESTR, {
+    method: 'POST', headers: atHeaders(),
+    body: JSON.stringify({ fields: { empId: id } })
+  }).then(function(r){ return r.json(); })
+    .then(function(rec) {
+      _restrictedEmps.push({ empId: id, recordId: rec.id });
+      document.getElementById('new-restr-id').value = '';
+      renderRestrictedList();
+      pToast('Restricted user added & synced ✓', 'ok');
+    }).catch(function(){ pToast('Failed to add restricted user', 'err'); });
+}
+
+function removeRestrictedUser(recordId) {
+  fetch(AT_URL_RESTR + '/' + recordId, { method: 'DELETE', headers: atHeaders() })
+    .then(function() {
+      _restrictedEmps = _restrictedEmps.filter(function(u){ return u.recordId !== recordId; });
+      renderRestrictedList();
+      pToast('Restricted user removed & synced ✓', 'ok');
+    }).catch(function(){ pToast('Failed to remove user', 'err'); });
+}
+
+function renderRestrictedList() {
+  var container = document.getElementById('restr-list');
+  document.getElementById('restr-count').textContent = _restrictedEmps.length;
+  if (!_restrictedEmps.length) { container.innerHTML = '<div class="admin-empty">No restricted users yet.</div>'; return; }
+  container.innerHTML = _restrictedEmps.map(function(u) {
+    return '<div class="admin-emp-row"><div class="admin-emp-info"><div class="admin-emp-id">' + u.empId + '</div></div>' +
+      '<button class="admin-remove-btn" data-action="remove-restr" data-id="' + u.recordId + '">Remove</button></div>';
+  }).join('');
+}
+
+/* ===============================================
+   LOCK ADMIN
+================================================ */
 function lockAdmin() {
   ADMIN_UNLOCKED = false;
   document.getElementById('admin-gate').style.display = 'block';
@@ -1364,6 +1505,17 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+
+/* Event delegation for admin remove buttons */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  var action = btn.getAttribute('data-action');
+  var id     = btn.getAttribute('data-id');
+  if (action === 'remove-admin')  removeAuthorizedEmp(id);
+  if (action === 'remove-user')   removePortalUser(id);
+  if (action === 'remove-restr')  removeRestrictedUser(id);
+});
 </script>
 
 
