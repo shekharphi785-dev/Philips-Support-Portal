@@ -899,46 +899,129 @@ td{padding:9px 12px;color:rgba(255,255,255,0.78)}
 
 <script>
 /* ===============================================
-   GSheet URLs
+   GSheet URLs — Escalation, Productivity, Cases
 ================================================ */
 var ESC_SHEET  = 'https://script.google.com/macros/s/AKfycbxyNJQIqdiCmub8rV79HWh2lRfZH6fVB0-aAleS74FhtdxhF5fjFtM5_g3zC8ervhVmDg/exec';
 var PROD_SHEET = 'https://script.google.com/macros/s/AKfycbw-fm5b_bjvFD8FR2-sHCRNTW-mxqYFSCVTf326u6e2TMc-ewN1Bhn3D-hj2_HgllIcog/exec';
 var CASE_SHEET = 'https://script.google.com/macros/s/AKfycby50lm964MC3UKXDdDORr1pS93pdmGtqB5-NQEstVR6iYQHGErjzps55QRLEMGeUObSMA/exec';
 
 /* ===============================================
+   AIRTABLE CONFIG
+   Config  table : PIN + admin emp IDs
+   Users   table : all employees allowed to login
+   Restricted    : employees allowed Productivity & Cases
+================================================ */
+var PROXY            = 'https://airtable-proxy.shekharphi785.workers.dev';
+var AT_BASE          = 'appSaGKLSDYFngrJi';
+var AT_CONFIG_TABLE  = 'tbluq1UYtX3iL7XU3';   // Config  — columns: pin, emps
+var AT_USERS_TABLE   = 'tblwVLCPAmuOUUbIi';   // Users   — columns: empId, name
+var AT_RESTR_TABLE   = 'tblKF8PT1ni9XHaoE';   // RestrictedUsers — column: empId
+
+var AT_URL_CONFIG = PROXY + '/v0/' + AT_BASE + '/' + AT_CONFIG_TABLE;
+var AT_URL_USERS  = PROXY + '/v0/' + AT_BASE + '/' + AT_USERS_TABLE;
+var AT_URL_RESTR  = PROXY + '/v0/' + AT_BASE + '/' + AT_RESTR_TABLE;
+
+function atHeaders() {
+  return { 'Content-Type': 'application/json' };
+}
+
+/* ===============================================
+   IN-MEMORY STATE
+================================================ */
+var ADMIN_UNLOCKED  = false;
+var _cloudPin       = '';          // loaded from Airtable Config
+var _cloudEmps      = [];          // admin emp IDs (from Config.emps)
+var _allUsers       = [];          // all login-allowed users [{empId, name, recordId}]
+var _restrictedEmps = [];          // restricted emp IDs [{empId, recordId}]
+var _configRecordId = null;
+var _configLoaded   = false;
+
+/* ===============================================
    SESSION — persisted in localStorage
-   Clears only on explicit Sign Out
 ================================================ */
 var SESSION = { name: '', empId: '' };
 
 function loadSession() {
   var saved = localStorage.getItem('philips_session');
-  if (saved) {
-    try { SESSION = JSON.parse(saved); } catch(e) {}
-  }
+  if (saved) { try { SESSION = JSON.parse(saved); } catch(e) {} }
 }
+function saveSession()  { localStorage.setItem('philips_session', JSON.stringify(SESSION)); }
+function clearSession() { SESSION = { name: '', empId: '' }; localStorage.removeItem('philips_session'); }
 
-function saveSession() {
-  localStorage.setItem('philips_session', JSON.stringify(SESSION));
-}
-
-function clearSession() {
-  SESSION = { name: '', empId: '' };
-  localStorage.removeItem('philips_session');
+/* ===============================================
+   LOAD ALL AIRTABLE DATA ON PAGE LOAD
+================================================ */
+function loadCloudConfig() {
+  // Load Config (PIN + admin emps), Users, RestrictedUsers in parallel
+  Promise.all([
+    fetch(AT_URL_CONFIG + '?maxRecords=1', { headers: atHeaders() }).then(function(r){ return r.json(); }),
+    fetch(AT_URL_USERS  + '?maxRecords=100', { headers: atHeaders() }).then(function(r){ return r.json(); }),
+    fetch(AT_URL_RESTR  + '?maxRecords=100', { headers: atHeaders() }).then(function(r){ return r.json(); })
+  ]).then(function(results) {
+    // Config
+    var configData = results[0];
+    if (configData.records && configData.records.length > 0) {
+      var rec = configData.records[0];
+      _configRecordId = rec.id;
+      if (rec.fields.Pin)  _cloudPin = String(rec.fields.Pin).trim();
+      if (rec.fields.Emp) {
+        var ids = String(rec.fields.Emp).split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        _cloudEmps = ids.map(function(id){ return { id: id, name: '' }; });
+      }
+    }
+    // Users
+    var usersData = results[1];
+    if (usersData.records) {
+      _allUsers = usersData.records.map(function(r) {
+        return { empId: (r.fields.empId || '').trim(), name: (r.fields.name || '').trim(), recordId: r.id };
+      }).filter(function(u){ return u.empId; });
+    }
+    // Restricted
+    var restrData = results[2];
+    if (restrData.records) {
+      _restrictedEmps = restrData.records.map(function(r) {
+        return { empId: (r.fields.empId || '').trim(), recordId: r.id };
+      }).filter(function(u){ return u.empId; });
+    }
+    _configLoaded = true;
+    if (SESSION.empId) applySession();
+  }).catch(function(err) {
+    console.warn('Airtable load failed:', err);
+    _configLoaded = true;
+  });
 }
 
 /* ===============================================
-   INIT — check for existing session on load
+   ACCESS CHECKS
+================================================ */
+// Is this empId allowed to login at all?
+function isAllowedUser(empId) {
+  if (isAdminUser(empId)) return true; // admins always bypass Users table
+  if (_allUsers.length === 0) return false;
+  return _allUsers.some(function(u){ return u.empId.toLowerCase() === empId.toLowerCase(); });
+}
+
+// Is this empId allowed to use Productivity & Cases?
+function isRestrictedAllowed(empId) {
+  if (_restrictedEmps.length === 0) return false;
+  return _restrictedEmps.some(function(u){ return u.empId.toLowerCase() === empId.toLowerCase(); });
+}
+
+// Is this empId an admin?
+function isAdminUser(empId) {
+  return _cloudEmps.some(function(e){ return e.id.toLowerCase() === empId.toLowerCase(); });
+}
+
+/* ===============================================
+   INIT
 ================================================ */
 window.addEventListener('DOMContentLoaded', function() {
-  loadCloudConfig();   // fetch PIN + emp list from Google Sheet
+  loadCloudConfig();
   loadSession();
   if (SESSION.name && SESSION.empId) {
-    // Already logged in — go straight to dashboard
     applySession();
     switchToDashboard();
   }
-  // Set today's date defaults
   var today = new Date().toISOString().split('T')[0];
   document.getElementById('esc-caseDate').value = today;
   document.getElementById('prod-date').value    = today;
@@ -949,9 +1032,18 @@ window.addEventListener('DOMContentLoaded', function() {
 ================================================ */
 function doLogin() {
   var name = document.getElementById('inp-name').value.trim();
-  var emp  = document.getElementById('inp-emp').value.trim();
+  var emp  = document.getElementById('inp-emp').value.trim().toUpperCase();
   if (!name) { pToast('Please enter your full name', 'err'); return; }
   if (!emp)  { pToast('Please enter your Employee ID', 'err'); return; }
+
+  // Wait for Airtable to finish loading before checking
+  if (!_configLoaded) { pToast('Loading data, please try again…', 'err'); return; }
+
+  if (!isAllowedUser(emp)) {
+    pToast('Access denied. Your Employee ID is not authorised.', 'err');
+    return;
+  }
+
   SESSION.name  = name;
   SESSION.empId = emp;
   saveSession();
@@ -969,23 +1061,17 @@ function doLogout() {
   showPanel('escalation');
 }
 
-var ADMIN_EMP_IDS = ['RM7028777', 'RM7029195'];
-
 function applySession() {
-  // Topbar
   document.getElementById('dash-name').textContent   = SESSION.name;
   document.getElementById('dash-emp').textContent    = SESSION.empId;
   document.getElementById('dash-avatar').textContent = SESSION.name.charAt(0).toUpperCase();
-  // Escalation agent strip
   document.getElementById('esc-agent-name').textContent = SESSION.name;
   document.getElementById('esc-agent-emp').textContent  = SESSION.empId;
-  // Auto-fill inputs in other forms
   document.querySelectorAll('.auto-name').forEach(function(el){ el.value = SESSION.name; });
   document.querySelectorAll('.auto-emp').forEach(function(el){ el.value = SESSION.empId; });
-  // Show Admin button only for authorized admin IDs
-  var isAdminUser = _cloudEmps.some(function(e){ return e.id.toLowerCase() === SESSION.empId.toLowerCase(); });
+  // Show Admin button only for admin emp IDs
   var adminBtn = document.getElementById('topbar-admin-btn');
-  if (adminBtn) adminBtn.style.display = isAdminUser ? 'block' : 'none';
+  if (adminBtn) adminBtn.style.display = isAdminUser(SESSION.empId) ? 'block' : 'none';
 }
 
 function switchToDashboard() {
@@ -999,9 +1085,21 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ===============================================
-   NAVIGATION
+   NAVIGATION — enforce Restricted access
 ================================================ */
 function showPanel(id) {
+  if ((id === 'productivity' || id === 'cases') && SESSION.empId) {
+    if (!isRestrictedAllowed(SESSION.empId)) {
+      pToast('Access restricted. Contact your admin.', 'err');
+      return;
+    }
+  }
+  if (id === 'admin' && SESSION.empId) {
+    if (!isAdminUser(SESSION.empId)) {
+      pToast('Admin access denied.', 'err');
+      return;
+    }
+  }
   ['escalation','productivity','cases','websites','admin'].forEach(function(p) {
     document.getElementById('panel-' + p).classList.remove('active');
     var navEl = document.getElementById('nav-' + p);
@@ -1014,33 +1112,25 @@ function showPanel(id) {
 
 /* ===============================================
    ESCALATION SUBMIT
-   Uses image-beacon GET (same method as original)
-   Sends: caseNumber, workshop, caseDate,
-          escalationReason, agentRemarks, caseType,
-          agentName, employeeId, submittedAt
 ================================================ */
 document.getElementById('escalationForm').addEventListener('submit', function(e) {
   e.preventDefault();
-
   var btn = document.getElementById('escSubmitBtn');
   btn.textContent = 'Submitting…';
   btn.style.opacity = '0.7';
   btn.disabled = true;
-
   var caseTypeEl = document.querySelector('input[name="caseType"]:checked');
-
   var params = new URLSearchParams({
-    agentName:         SESSION.name,
-    employeeId:        SESSION.empId,
-    caseNumber:        document.getElementById('esc-caseNumber').value,
-    workshop:          document.getElementById('esc-workshop').value,
-    caseDate:          document.getElementById('esc-caseDate').value,
-    escalationReason:  document.getElementById('esc-escalationReason').value,
-    agentRemarks:      document.getElementById('esc-agentRemarks').value,
-    caseType:          caseTypeEl ? caseTypeEl.value : '',
-    submittedAt:       new Date().toLocaleString()
+    agentName:        SESSION.name,
+    employeeId:       SESSION.empId,
+    caseNumber:       document.getElementById('esc-caseNumber').value,
+    workshop:         document.getElementById('esc-workshop').value,
+    caseDate:         document.getElementById('esc-caseDate').value,
+    escalationReason: document.getElementById('esc-escalationReason').value,
+    agentRemarks:     document.getElementById('esc-agentRemarks').value,
+    caseType:         caseTypeEl ? caseTypeEl.value : '',
+    submittedAt:      new Date().toLocaleString()
   });
-
   var img = new Image();
   img.onload = img.onerror = function() {
     escToast('OK', 'Escalation submitted successfully!');
@@ -1065,22 +1155,13 @@ async function submitProductivity() {
   var caseNo  = document.getElementById('prod-case').value.trim();
   var dateVal = document.getElementById('prod-date').value;
   var emailV  = document.getElementById('prod-email-addr').value.trim();
-
-  if (!origin)  { pToast('Select an origin', 'err'); return; }
-  if (!caseNo)  { pToast('Enter a case number', 'err'); return; }
-  if (!emailV)  { pToast('Enter an email address', 'err'); return; }
-
+  if (!origin) { pToast('Select an origin', 'err'); return; }
+  if (!caseNo) { pToast('Enter a case number', 'err'); return; }
+  if (!emailV) { pToast('Enter an email address', 'err'); return; }
   var btn = document.getElementById('prodSubmitBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
-
-  var payload = {
-    name: SESSION.name, empId: SESSION.empId,
-    origin: origin.value, caseNumber: caseNo,
-    date: dateVal, email: emailV,
-    timestamp: new Date().toISOString()
-  };
-
+  var payload = { name: SESSION.name, empId: SESSION.empId, origin: origin.value, caseNumber: caseNo, date: dateVal, email: emailV, timestamp: new Date().toISOString() };
   try {
     await fetch(PROD_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
     pToast('Entry submitted successfully!', 'ok');
@@ -1103,23 +1184,15 @@ var caseEntries = [];
 async function submitCase() {
   var caseId = document.getElementById('case-id').value.trim();
   var origin = document.getElementById('case-origin').value;
-  if (!caseId)  { pToast('Enter a Case ID', 'err'); return; }
-  if (!origin)  { pToast('Select an origin', 'err'); return; }
-
+  if (!caseId) { pToast('Enter a Case ID', 'err'); return; }
+  if (!origin) { pToast('Select an origin', 'err'); return; }
   var btn = document.getElementById('caseSubmitBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
-
-  var entry = {
-    name: SESSION.name, empId: SESSION.empId,
-    caseId: caseId, origin: origin,
-    timestamp: new Date().toLocaleString('en-IN')
-  };
-
+  var entry = { name: SESSION.name, empId: SESSION.empId, caseId: caseId, origin: origin, timestamp: new Date().toLocaleString('en-IN') };
   try {
     await fetch(CASE_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
   } catch(err) { console.warn('GSheet error:', err); }
-
   caseEntries.push(entry);
   renderCaseTable();
   pToast('✅ Case submitted and logged!', 'ok');
@@ -1172,71 +1245,10 @@ function escToast(icon, msg) {
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 /* ===============================================
-   CONFIG — Google Sheets cloud sync
-   All PIN + Employee ID changes save to Sheet
-   and are fetched fresh on every page load
+   ADMIN — PIN VERIFY / CHANGE
 ================================================ */
-var CONFIG_SHEET = 'https://script.google.com/macros/s/AKfycbw81fgrEkmUy4ciCrd9SW7_p4S_34VDpwwExtYDKQKl1QI2wfXRyfBCRhTUkWl3_GHo/exec';
+function getAdminPin() { return _cloudPin; }
 
-var ADMIN_UNLOCKED = false;
-var _cloudPin  = '200526';          // fallback until cloud loads
-var _cloudEmps = [                   // fallback until cloud loads
-  { id: 'RM7028777', name: '' },
-  { id: 'RM7029195', name: '' }
-];
-var _configLoaded = false;
-
-/* ---- Load config from Google Sheet on page load ---- */
-function loadCloudConfig() {
-  var script = document.createElement('script');
-  var cbName = '_configCallback_' + Date.now();
-  window[cbName] = function(data) {
-    if (data.pin)  _cloudPin  = String(data.pin).trim();
-    if (data.emps) {
-      var ids = String(data.emps).split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-      _cloudEmps = ids.map(function(id){ return { id: id, name: '' }; });
-    }
-    _configLoaded = true;
-    if (SESSION.empId) applySession();
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-  };
-  script.onerror = function() {
-    console.warn('Config load failed, using fallback');
-    _configLoaded = true;
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-  };
-  script.src = CONFIG_SHEET + '?callback=' + cbName;
-  document.head.appendChild(script);
-}
-
-/* ---- Save config back to Google Sheet ---- */
-function saveCloudConfig(pin, empList) {
-  var empStr = empList.map(function(e){ return e.id; }).join(',');
-  fetch(CONFIG_SHEET, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ pin: pin, emps: empStr })
-  }).catch(function(err){ console.warn('Config save failed:', err); });
-}
-
-function getAdminPin()        { return _cloudPin; }
-function getAuthorizedEmps()  { return _cloudEmps; }
-function saveAuthorizedEmps(list) {
-  _cloudEmps = list;
-  saveCloudConfig(_cloudPin, _cloudEmps);
-}
-
-function isAuthorized(empId) {
-  if (_cloudEmps.length === 0) return true;
-  return _cloudEmps.some(function(e){ return e.id.toLowerCase() === empId.toLowerCase(); });
-}
-
-/* ===============================================
-   ADMIN PIN + AUTHORIZED EMP MANAGEMENT
-================================================ */
 function verifyAdminPin() {
   var pin = document.getElementById('admin-pin-input').value;
   if (pin === getAdminPin()) {
@@ -1257,85 +1269,63 @@ function changeAdminPin() {
   if (!np) { pToast('Enter a new PIN', 'err'); return; }
   if (np !== cp) { pToast('PINs do not match', 'err'); return; }
   _cloudPin = np;
-  saveCloudConfig(_cloudPin, _cloudEmps);
+  // Save new PIN to Airtable Config record
+  if (_configRecordId) {
+    fetch(AT_URL_CONFIG + '/' + _configRecordId, {
+      method: 'PATCH',
+      headers: atHeaders(),
+      body: JSON.stringify({ fields: { Pin: np } })
+    }).then(function(){ pToast('PIN updated & synced ✓', 'ok'); })
+      .catch(function(){ pToast('PIN changed locally but sync failed', 'err'); });
+  }
   document.getElementById('new-pin').value = '';
   document.getElementById('confirm-pin').value = '';
-  pToast('PIN updated & synced to cloud ✓', 'ok');
+}
+
+/* ===============================================
+   ADMIN — MANAGE AUTHORIZED ADMIN EMP IDs
+   (stored in Config table emps column)
+================================================ */
+function getAuthorizedEmps()  { return _cloudEmps; }
+
+function saveAdminEmpsToAirtable() {
+  if (!_configRecordId) return;
+  var empStr = _cloudEmps.map(function(e){ return e.id; }).join(',');
+  fetch(AT_URL_CONFIG + '/' + _configRecordId, {
+    method: 'PATCH',
+    headers: atHeaders(),
+    body: JSON.stringify({ fields: { Emp: empStr } })
+  }).catch(function(err){ console.warn('Admin emp sync failed:', err); });
 }
 
 function addAuthorizedEmp() {
-  var id   = document.getElementById('new-emp-id').value.trim();
+  var id   = document.getElementById('new-emp-id').value.trim().toUpperCase();
   var name = document.getElementById('new-emp-name').value.trim();
   if (!id) { pToast('Enter an Employee ID', 'err'); return; }
-
-  var btn = document.querySelector('.f-btn[onclick="addAuthorizedEmp()"]');
-  if (btn) { btn.disabled = true; btn.textContent = 'Syncing…'; }
-
-  // Always fetch fresh list from cloud before adding to avoid overwriting other changes
-  fetchFreshEmps(function(freshList) {
-    if (freshList.some(function(e){ return e.id.toLowerCase() === id.toLowerCase(); })) {
-      pToast('Employee ID already exists', 'err');
-      if (btn) { btn.disabled = false; btn.innerHTML = 'Add Employee &nbsp;→'; }
-      return;
-    }
-    freshList.push({ id: id, name: name || '' });
-    _cloudEmps = freshList;
-    saveCloudConfig(_cloudPin, _cloudEmps);
-    document.getElementById('new-emp-id').value = '';
-    document.getElementById('new-emp-name').value = '';
-    renderEmpList();
-    if (btn) { btn.disabled = false; btn.innerHTML = 'Add Employee &nbsp;→'; }
-    pToast('Employee added & synced to cloud ✓', 'ok');
-  });
+  if (_cloudEmps.some(function(e){ return e.id.toLowerCase() === id.toLowerCase(); })) {
+    pToast('Employee ID already in admin list', 'err'); return;
+  }
+  _cloudEmps.push({ id: id, name: name || '' });
+  saveAdminEmpsToAirtable();
+  document.getElementById('new-emp-id').value = '';
+  document.getElementById('new-emp-name').value = '';
+  renderEmpList();
+  pToast('Admin employee added & synced ✓', 'ok');
 }
 
 function removeAuthorizedEmp(id) {
-  fetchFreshEmps(function(freshList) {
-    _cloudEmps = freshList.filter(function(e){ return e.id !== id; });
-    saveCloudConfig(_cloudPin, _cloudEmps);
-    renderEmpList();
-    pToast('Employee removed & synced to cloud ✓', 'ok');
-  });
+  _cloudEmps = _cloudEmps.filter(function(e){ return e.id !== id; });
+  saveAdminEmpsToAirtable();
+  renderEmpList();
+  pToast('Admin employee removed & synced ✓', 'ok');
 }
 
 function clearAllEmps() {
-  if (!confirm('Remove all authorized Employee IDs? Everyone will be allowed until you add new ones.')) return;
+  if (!confirm('Remove all admin Employee IDs?')) return;
   _cloudEmps = [];
-  saveCloudConfig(_cloudPin, _cloudEmps);
+  saveAdminEmpsToAirtable();
   renderEmpList();
-  pToast('All employees cleared & synced to cloud ✓', 'ok');
-}
-
-/* Fetch latest emp list from cloud before mutating */
-function fetchFreshEmps(callback) {
-  var script = document.createElement('script');
-  var cbName = '_freshEmpsCallback_' + Date.now();
-  window[cbName] = function(data) {
-    var freshList = [];
-    if (data.emps) {
-      var ids = String(data.emps).split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-      freshList = ids.map(function(id){ return { id: id, name: '' }; });
-    }
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-    callback(freshList);
-  };
-  script.onerror = function() {
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-    // fallback to in-memory list if fetch fails
-    callback(_cloudEmps.slice());
-  };
-  script.src = CONFIG_SHEET + '?callback=' + cbName;
-  document.head.appendChild(script);
-}
-
-function lockAdmin() {
-  ADMIN_UNLOCKED = false;
-  document.getElementById('admin-gate').style.display = 'block';
-  document.getElementById('admin-dashboard').style.display = 'none';
-  document.getElementById('admin-pin-input').value = '';
-  pToast('Admin locked', 'ok');
+  pToast('All admin employees cleared & synced ✓', 'ok');
 }
 
 function renderEmpList() {
@@ -1343,7 +1333,7 @@ function renderEmpList() {
   var container = document.getElementById('emp-list');
   document.getElementById('emp-count').textContent = list.length;
   if (list.length === 0) {
-    container.innerHTML = '<div class="admin-empty">No authorized employees added yet.<br>When empty, all users can access all forms.</div>';
+    container.innerHTML = '<div class="admin-empty">No admin employees added yet.</div>';
     return;
   }
   container.innerHTML = list.map(function(e) {
@@ -1357,17 +1347,13 @@ function renderEmpList() {
   }).join('');
 }
 
-/*  Patch showPanel to enforce authorization  */
-var _origShowPanel = showPanel;
-showPanel = function(id) {
-  if ((id === 'productivity' || id === 'cases') && SESSION.empId) {
-    if (!isAuthorized(SESSION.empId)) {
-      pToast('Access restricted. Contact your admin.', 'err');
-      return;
-    }
-  }
-  _origShowPanel(id);
-};
+function lockAdmin() {
+  ADMIN_UNLOCKED = false;
+  document.getElementById('admin-gate').style.display = 'block';
+  document.getElementById('admin-dashboard').style.display = 'none';
+  document.getElementById('admin-pin-input').value = '';
+  pToast('Admin locked', 'ok');
+}
 
 /* Enter key on admin PIN */
 document.addEventListener('keydown', function(e) {
