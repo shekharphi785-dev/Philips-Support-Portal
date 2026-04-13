@@ -951,7 +951,7 @@ td{padding:9px 12px;color:rgba(255,255,255,0.78)}
 /* ===============================================
    GSheet URLs — Escalation, Productivity, Cases
 ================================================ */
-var ESC_SHEET  = 'https://script.google.com/macros/s/AKfycbxyNJQIqdiCmub8rV79HWh2lRfZH6fVB0-aAleS74FhtdxhF5fjFtM5_g3zC8ervhVmDg/exec';
+var ESC_SHEET  = 'https://hook.eu1.make.com/i9ahu49048srqit0o7kv4uvqiw7u3ulg';
 var PROD_SHEET = 'https://script.google.com/macros/s/AKfycbw-fm5b_bjvFD8FR2-sHCRNTW-mxqYFSCVTf326u6e2TMc-ewN1Bhn3D-hj2_HgllIcog/exec';
 var CASE_SHEET = 'https://script.google.com/macros/s/AKfycby50lm964MC3UKXDdDORr1pS93pdmGtqB5-NQEstVR6iYQHGErjzps55QRLEMGeUObSMA/exec';
 
@@ -1181,15 +1181,26 @@ document.getElementById('escalationForm').addEventListener('submit', function(e)
     caseType:         caseTypeEl ? caseTypeEl.value : '',
     submittedAt:      new Date().toLocaleString()
   });
-  var img = new Image();
-  img.onload = img.onerror = function() {
-    escToast('OK', 'Escalation submitted successfully!');
-    resetEscalation();
-    btn.textContent = 'Submit Escalation';
-    btn.style.opacity = '1';
-    btn.disabled = false;
-  };
-  img.src = ESC_SHEET + '?' + params.toString();
+  fetch(ESC_SHEET, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      agentName:        SESSION.name,
+      employeeId:       SESSION.empId,
+      caseNumber:       document.getElementById('esc-caseNumber').value,
+      workshop:         document.getElementById('esc-workshop').value,
+      caseDate:         document.getElementById('esc-caseDate').value,
+      escalationReason: document.getElementById('esc-escalationReason').value,
+      agentRemarks:     document.getElementById('esc-agentRemarks').value,
+      caseType:         caseTypeEl ? caseTypeEl.value : '',
+      submittedAt:      new Date().toLocaleString()
+    })
+  });
+  escToast('OK', 'Escalation submitted successfully!');
+  resetEscalation();
+  btn.textContent = 'Submit Escalation';
+  btn.style.opacity = '1';
+  btn.disabled = false;
 });
 
 function resetEscalation() {
@@ -1212,18 +1223,13 @@ async function submitProductivity() {
   btn.disabled = true;
   btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
   var payload = { name: SESSION.name, empId: SESSION.empId, origin: origin.value, caseNumber: caseNo, date: dateVal, email: emailV, timestamp: new Date().toISOString() };
-  try {
-    await fetch(PROD_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-    pToast('Entry submitted successfully!', 'ok');
-    document.getElementById('prod-case').value = '';
-    document.getElementById('prod-email-addr').value = '';
-    document.querySelectorAll('input[name="prodOrigin"]').forEach(function(r){ r.checked = false; });
-  } catch(err) {
-    pToast('Submission failed. Check connection.', 'err');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = 'Submit Entry &nbsp;→';
-  }
+  fetch(PROD_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+  pToast('Entry submitted successfully!', 'ok');
+  document.getElementById('prod-case').value = '';
+  document.getElementById('prod-email-addr').value = '';
+  document.querySelectorAll('input[name="prodOrigin"]').forEach(function(r){ r.checked = false; });
+  btn.disabled = false;
+  btn.innerHTML = 'Submit Entry &nbsp;→';
 }
 
 /* ===============================================
@@ -1240,9 +1246,7 @@ async function submitCase() {
   btn.disabled = true;
   btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
   var entry = { name: SESSION.name, empId: SESSION.empId, caseId: caseId, origin: origin, timestamp: new Date().toLocaleString('en-IN') };
-  try {
-    await fetch(CASE_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
-  } catch(err) { console.warn('GSheet error:', err); }
+  fetch(CASE_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
   caseEntries.push(entry);
   renderCaseTable();
   pToast('✅ Case submitted and logged!', 'ok');
