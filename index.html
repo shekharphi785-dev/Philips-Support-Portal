@@ -9,7 +9,7 @@
 <!-- Preconnect for faster font loading -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 
 <!-- Direct Image Link to the requested Flaticon Favicon -->
 <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png"/>
@@ -141,8 +141,7 @@
   --item-hover: rgba(232, 232, 232, 0.1);
   --icon-bg: rgba(232, 232, 232, 0.15);
 }
-/* Carbon light accent fixes for dark contrast */[data-theme="carbon"] .btn-continue,[data-theme="carbon"] .f-btn,[data-theme="carbon"] .esc-btn-submit { color: #141414; }[data-theme="carbon"] .nav-item.active .nav-icon { color: #141414; }
-[data-theme="carbon"] .user-avatar { color: #141414; }
+/* Carbon light accent fixes for dark contrast */[data-theme="carbon"] .btn-continue,[data-theme="carbon"] .f-btn,[data-theme="carbon"] .esc-btn-submit { color: #141414; }[data-theme="carbon"] .nav-item.active .nav-icon { color: #141414; }[data-theme="carbon"] .user-avatar { color: #141414; }
 
 /* 6. EMERALD GROVE (Dark Green + Light Green) */[data-theme="emerald"] {
   --bg-base: #06170d;
@@ -189,7 +188,7 @@
 [data-mode="light"] .esc-field select option,[data-mode="light"] .f-select option { background: #ffffff; color: #0f172a; }
 [data-mode="light"] .esc-field input[type="date"]::-webkit-calendar-picker-indicator,[data-mode="light"] .f-input[type="time"]::-webkit-calendar-picker-indicator { filter: none; }
 
-html, body { height: 100%; width: 100%; font-family: 'Outfit', sans-serif; overflow: hidden; background: var(--bg-base); color: var(--text-main); transition: background 0.3s, color 0.3s; }
+html, body { height: 100%; width: 100%; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg-base); color: var(--text-main); transition: background 0.3s, color 0.3s; }
 
 /* Dynamic CSS Blurred Mesh Background */
 .bg { position: fixed; inset: 0; z-index: 0; background: var(--bg-base); transition: background 0.4s ease; overflow: hidden;}
@@ -226,7 +225,7 @@ html, body { height: 100%; width: 100%; font-family: 'Outfit', sans-serif; overf
 .l-field label { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
 .l-field input {
   width: 100%; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-input);
-  padding: 13px 17px; color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 0.92rem;
+  padding: 13px 17px; color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.92rem;
   outline: none; transition: all 0.22s; appearance: none;
 }
 .l-field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--input-focus); background: var(--input-bg); }
@@ -235,7 +234,7 @@ html, body { height: 100%; width: 100%; font-family: 'Outfit', sans-serif; overf
 .btn-continue, .f-btn, .esc-btn-submit {
   width: 100%; margin-top: 8px; padding: 14px;
   background: var(--primary-gradient);
-  border: none; border-radius: 13px; color: #fff; font-family: 'Outfit', sans-serif;
+  border: none; border-radius: 13px; color: #fff; font-family: 'Inter', sans-serif;
   font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s;
   box-shadow: 0 4px 24px var(--input-focus), 0 1px 0 rgba(255,255,255,0.16) inset;
   position: relative; overflow: hidden;
@@ -314,7 +313,7 @@ html, body { height: 100%; width: 100%; font-family: 'Outfit', sans-serif; overf
 .esc-field { display: flex; flex-direction: column; gap: 7px; }
 .req { color: var(--primary); margin-left: 3px; font-size: 0.8em; }
 .esc-field input, .esc-field textarea, .esc-field select, .f-input, .f-select, .f-textarea {
-  width: 100%; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 11px; padding: 11px 14px; color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 0.87rem; outline: none; transition: all .2s; appearance: none;
+  width: 100%; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 11px; padding: 11px 14px; color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.87rem; outline: none; transition: all .2s; appearance: none;
 }
 .esc-field input[type="date"]::-webkit-calendar-picker-indicator, .f-input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
 .esc-field input::placeholder, .esc-field textarea::placeholder, .f-input::placeholder { color: var(--text-muted); opacity: 0.5; }
@@ -341,7 +340,7 @@ html, body { height: 100%; width: 100%; font-family: 'Outfit', sans-serif; overf
 .esc-section-label, .f-section-title { grid-column: 1 / -1; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; margin-top: 2px; display: flex; align-items: center; gap: 10px; }
 .esc-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border-light), transparent); }
 .esc-actions { grid-column: 1 / -1; display: flex; gap: 11px; align-items: center; margin-top: 6px; }
-.esc-btn-reset { padding: 13px 19px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 12px; color: var(--text-muted); font-family: 'Outfit', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-weight: 600; }
+.esc-btn-reset { padding: 13px 19px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-weight: 600; }
 .esc-btn-reset:hover { border-color: var(--primary); color: var(--text-main); background: var(--item-hover); }
 
 .f-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border-light), transparent); margin: 18px 0; }
@@ -415,15 +414,15 @@ td { padding: 9px 12px; color: var(--text-main); }
 .admin-emp-info { display: flex; flex-direction: column; gap: 2px; }
 .admin-emp-id { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--primary); font-weight: 700; }
 .admin-emp-name { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-.admin-remove-btn { background: var(--danger-bg); border: 1px solid var(--border-light); border-radius: 7px; padding: 4px 11px; color: var(--danger-text); font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Outfit', sans-serif; }
+.admin-remove-btn { background: var(--danger-bg); border: 1px solid var(--border-light); border-radius: 7px; padding: 4px 11px; color: var(--danger-text); font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
 .admin-remove-btn:hover { background: var(--danger-text); color: #fff; }
-.admin-danger-btn, .admin-lock-btn { flex: 1; padding: 10px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.admin-danger-btn, .admin-lock-btn { flex: 1; padding: 10px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .admin-danger-btn { background: var(--danger-bg); border: 1px solid var(--border-light); color: var(--danger-text); }
 .admin-danger-btn:hover { background: var(--danger-text); color: #fff; }
 .admin-lock-btn { background: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-muted); }
 .admin-lock-btn:hover { background: var(--item-hover); color: var(--primary); border-color: var(--primary); }
 .admin-empty { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.82rem; }
-.admin-tab-btn { background: var(--input-bg); border: 1.5px solid var(--card-border); border-radius: 9px; color: var(--text-muted); font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 600; padding: 7px 14px; cursor: pointer; transition: all .2s; }
+.admin-tab-btn { background: var(--input-bg); border: 1.5px solid var(--card-border); border-radius: 9px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; padding: 7px 14px; cursor: pointer; transition: all .2s; }
 .admin-tab-btn:hover { background: var(--item-hover); color: var(--text-main); }
 .admin-tab-btn.active { background: var(--icon-bg); border-color: var(--primary); color: var(--primary); }
 </style>
@@ -461,7 +460,7 @@ td { padding: 9px 12px; color: var(--text-main); }
 <main class="page" id="page-dashboard">
 
   <header class="topbar">
-    <div class="topbar-brand">Philips Support Portal</div>
+    <div class="topbar-brand">Support Portal</div>
     
     <div class="topbar-user">
       <button id="theme-toggle" class="theme-btn" onclick="toggleMode()" title="Toggle Light/Dark Mode">
@@ -514,6 +513,7 @@ td { padding: 9px 12px; color: var(--text-main); }
           <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
           <span>Case Submission</span>
         </div>
+        <!-- ALL USERS CAN NOW SEE THE CALL BACK FORM -->
         <div class="nav-item" onclick="showPanel('callback')" id="nav-callback">
           <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
           <span>Call Back</span>
@@ -1065,7 +1065,8 @@ document.addEventListener('keydown', e => {
 });
 
 const showPanel = id => {
-  if (['productivity', 'cases', 'callback'].includes(id) && SESSION.empId && !isRestrictedAllowed(SESSION.empId)) 
+  // Callback removed from restricted array below:
+  if (['productivity', 'cases'].includes(id) && SESSION.empId && !isRestrictedAllowed(SESSION.empId)) 
     return pToast('Access restricted. Contact your admin.', 'err');
   if (id === 'admin' && SESSION.empId && !isAdminUser(SESSION.empId)) 
     return pToast('Admin access denied.', 'err');['escalation','productivity','cases','callback','websites','admin'].forEach(p => {
