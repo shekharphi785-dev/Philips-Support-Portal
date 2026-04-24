@@ -1,27 +1,27 @@
 /* Theme Image Mapping */
 :root,
 [data-theme="default"] {
-  --bg-image: url('background/Default.jfif');
+  --bg-image: url('https://raw.githubusercontent.com/shekharphi785-dev/Test-2-Theme/main/Background/Default.jfif');
 }
 
 [data-theme="sunset"] {
-  --bg-image: url('background/Sunset.jfif');
+  --bg-image: url('https://raw.githubusercontent.com/shekharphi785-dev/Test-2-Theme/main/Background/Sunset.jfif');
 }
 
 [data-theme="aurora"] {
-  --bg-image: url('background/Aurora.jfif');
+  --bg-image: url('https://raw.githubusercontent.com/shekharphi785-dev/Test-2-Theme/main/Background/Aurora.jfif');
 }
 
 [data-theme="nebula"] {
-  --bg-image: url('background/Nebula.jfif');
+  --bg-image: url('https://raw.githubusercontent.com/shekharphi785-dev/Test-2-Theme/main/Background/Nebula.jfif');
 }
 
 [data-theme="carbon"] {
-  --bg-image: url('background/Carbon.jfif');
+  --bg-image: url('https://raw.githubusercontent.com/shekharphi785-dev/Test-2-Theme/main/Background/Carbon.jfif');
 }
 
 [data-theme="emerald"] {
-  --bg-image: url('background/Emb.jfif');
+  --bg-image: url('https://raw.githubusercontent.com/shekharphi785-dev/Test-2-Theme/main/Background/Emb.jfif');
 }
 
 .bg {
