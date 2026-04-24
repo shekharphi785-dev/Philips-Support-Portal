@@ -1,1365 +1,884 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="theme-color" content="#0f172a" id="meta-theme-color"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" id="meta-theme-color" />
 
-<!-- Cache-busting meta tags to prevent the browser from serving old code -->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
+  <!-- Cache-busting meta tags to prevent the browser from serving old code -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
-<title>Philips Support Portal</title>
+  <title>Philips Support Portal</title>
 
-<!-- Preconnect for faster font loading -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
 
-<!-- Direct Image Link to the requested Flaticon Favicon -->
-<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png"/>
-<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png"/>
-<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png"/>
+  <!-- Direct Image Link to the requested Flaticon Favicon -->
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png" />
+  <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png" />
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/9343/9343371.png" />
 
-<style>
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ==========================================
-   MULTI-THEME SYSTEM & LIGHT/DARK MODE
-============================================ */
-:root {
-  /* 1. DEFAULT THEME (Blue Based) */
-  --bg-base: #0f172a;
-  --bg-accent1: #1e3a8a;
-  --bg-accent2: #3b82f6;
-  --overlay: rgba(15, 23, 42, 0.7);
-  
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  
-  --card-bg: rgba(30, 41, 59, 0.6);
-  --card-border: rgba(59, 130, 246, 0.25);
-  --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-  
-  --input-bg: rgba(15, 23, 42, 0.7);
-  --input-border: rgba(59, 130, 246, 0.4);
-  --input-focus: rgba(59, 130, 246, 0.3);
-  
-  --primary: #3b82f6;
-  --primary-hover: #60a5fa;
-  --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  
-  --sidebar-bg: rgba(15, 23, 42, 0.75);
-  --topbar-bg: rgba(15, 23, 42, 0.9);
-  
-  --danger-bg: rgba(239, 68, 68, 0.15);
-  --danger-text: #f87171;
-  --success-text: #34d399;
-  
-  --border-light: rgba(59, 130, 246, 0.2);
-  --item-hover: rgba(59, 130, 246, 0.15);
-  --icon-bg: rgba(59, 130, 246, 0.2);
-  
-  --radius-card: 26px;
-  --radius-input: 13px;
-}
-
-/* 2. SUNSET (Orange + Pink) */[data-theme="sunset"] {
-  --bg-base: #1f1415;
-  --bg-accent1: #D95E3D;
-  --bg-accent2: #C94C74;
-  --overlay: rgba(31, 20, 21, 0.7);
-  --card-bg: rgba(43, 23, 26, 0.6);
-  --card-border: rgba(217, 94, 61, 0.25);
-  --input-bg: rgba(31, 20, 21, 0.7);
-  --input-border: rgba(217, 94, 61, 0.4);
-  --input-focus: rgba(217, 94, 61, 0.3);
-  --primary: #D95E3D;
-  --primary-hover: #e66e4d;
-  --primary-gradient: linear-gradient(135deg, #D95E3D 0%, #C94C74 100%);
-  --sidebar-bg: rgba(31, 20, 21, 0.75);
-  --topbar-bg: rgba(31, 20, 21, 0.9);
-  --border-light: rgba(217, 94, 61, 0.2);
-  --item-hover: rgba(217, 94, 61, 0.15);
-  --icon-bg: rgba(217, 94, 61, 0.2);
-}
-
-/* 3. AURORA (Blue + Green) */[data-theme="aurora"] {
-  --bg-base: #0a1b24;
-  --bg-accent1: #0077A8;
-  --bg-accent2: #009E6F;
-  --overlay: rgba(10, 27, 36, 0.7);
-  --card-bg: rgba(15, 38, 50, 0.6);
-  --card-border: rgba(0, 158, 111, 0.25);
-  --input-bg: rgba(10, 27, 36, 0.7);
-  --input-border: rgba(0, 158, 111, 0.4);
-  --input-focus: rgba(0, 158, 111, 0.3);
-  --primary: #009E6F;
-  --primary-hover: #00ba83;
-  --primary-gradient: linear-gradient(135deg, #009E6F 0%, #0077A8 100%);
-  --sidebar-bg: rgba(10, 27, 36, 0.75);
-  --topbar-bg: rgba(10, 27, 36, 0.9);
-  --border-light: rgba(0, 158, 111, 0.2);
-  --item-hover: rgba(0, 158, 111, 0.15);
-  --icon-bg: rgba(0, 158, 111, 0.2);
-}
-
-/* 4. NEBULA (Blue + Purple) */[data-theme="nebula"] {
-  --bg-base: #111226;
-  --bg-accent1: #6A3FAE;
-  --bg-accent2: #2E5CA8;
-  --overlay: rgba(17, 18, 38, 0.7);
-  --card-bg: rgba(28, 30, 56, 0.6);
-  --card-border: rgba(106, 63, 174, 0.25);
-  --input-bg: rgba(17, 18, 38, 0.7);
-  --input-border: rgba(106, 63, 174, 0.4);
-  --input-focus: rgba(106, 63, 174, 0.3);
-  --primary: #6A3FAE;
-  --primary-hover: #8352ce;
-  --primary-gradient: linear-gradient(135deg, #6A3FAE 0%, #2E5CA8 100%);
-  --sidebar-bg: rgba(17, 18, 38, 0.75);
-  --topbar-bg: rgba(17, 18, 38, 0.9);
-  --border-light: rgba(106, 63, 174, 0.2);
-  --item-hover: rgba(106, 63, 174, 0.15);
-  --icon-bg: rgba(106, 63, 174, 0.2);
-}
-
-/* 5. CARBON (White + Grey) */[data-theme="carbon"] {
-  --bg-base: #141414;
-  --bg-accent1: #E8E8E8;
-  --bg-accent2: #707070;
-  --overlay: rgba(20, 20, 20, 0.7);
-  --text-main: #f5f5f5;
-  --text-muted: #a3a3a3;
-  --card-bg: rgba(30, 30, 30, 0.6);
-  --card-border: rgba(232, 232, 232, 0.25);
-  --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-  --input-bg: rgba(24, 24, 24, 0.7);
-  --input-border: rgba(232, 232, 232, 0.3);
-  --input-focus: rgba(232, 232, 232, 0.25);
-  --primary: #E8E8E8;
-  --primary-hover: #ffffff;
-  --primary-gradient: linear-gradient(135deg, #E8E8E8 0%, #707070 100%);
-  --sidebar-bg: rgba(24, 24, 24, 0.75);
-  --topbar-bg: rgba(24, 24, 24, 0.9);
-  --border-light: rgba(232, 232, 232, 0.15);
-  --item-hover: rgba(232, 232, 232, 0.1);
-  --icon-bg: rgba(232, 232, 232, 0.15);
-}
-/* Carbon light accent fixes for dark contrast */[data-theme="carbon"] .btn-continue,[data-theme="carbon"] .f-btn,[data-theme="carbon"] .esc-btn-submit { color: #141414; }[data-theme="carbon"] .nav-item.active .nav-icon { color: #141414; }
-[data-theme="carbon"] .user-avatar { color: #141414; }
-
-/* 6. EMERALD GROVE (Dark Green + Light Green) */[data-theme="emerald"] {
-  --bg-base: #06170d;
-  --bg-accent1: #006D2C;
-  --bg-accent2: #A1D99B;
-  --overlay: rgba(6, 23, 13, 0.7);
-  --card-bg: rgba(12, 38, 22, 0.6);
-  --card-border: rgba(161, 217, 155, 0.25);
-  --input-bg: rgba(6, 23, 13, 0.7);
-  --input-border: rgba(161, 217, 155, 0.4);
-  --input-focus: rgba(161, 217, 155, 0.3);
-  --primary: #A1D99B;
-  --primary-hover: #bdeab7;
-  --primary-gradient: linear-gradient(135deg, #A1D99B 0%, #006D2C 100%);
-  --sidebar-bg: rgba(6, 23, 13, 0.75);
-  --topbar-bg: rgba(6, 23, 13, 0.9);
-  --border-light: rgba(161, 217, 155, 0.2);
-  --item-hover: rgba(161, 217, 155, 0.15);
-  --icon-bg: rgba(161, 217, 155, 0.2);
-}
-/* Emerald Grove light accent fixes for dark contrast */[data-theme="emerald"] .btn-continue,[data-theme="emerald"] .f-btn,[data-theme="emerald"] .esc-btn-submit { color: #06170d; }[data-theme="emerald"] .nav-item.active .nav-icon { color: #06170d; }[data-theme="emerald"] .user-avatar { color: #06170d; }
-
-/* ==========================================
-   LIGHT MODE OVERRIDES 
-============================================ */[data-mode="light"] {
-  --bg-base: #f8fafc;
-  --overlay: rgba(255, 255, 255, 0.65);
-  --text-main: #0f172a;
-  --text-muted: #475569;
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --card-border: rgba(0, 0, 0, 0.08);
-  --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
-  --input-bg: #ffffff;
-  --input-border: rgba(0, 0, 0, 0.15);
-  --input-focus: rgba(0, 0, 0, 0.08);
-  --sidebar-bg: rgba(248, 250, 252, 0.85);
-  --topbar-bg: rgba(255, 255, 255, 0.95);
-  --border-light: rgba(0, 0, 0, 0.08);
-  --item-hover: rgba(0, 0, 0, 0.04);
-  --icon-bg: rgba(0, 0, 0, 0.04);
-  --danger-text: #dc2626;
-  --success-text: #059669;
-}[data-mode="light"] .esc-field select option,[data-mode="light"] .f-select option { background: #ffffff; color: #0f172a; }[data-mode="light"] .esc-field input[type="date"]::-webkit-calendar-picker-indicator,[data-mode="light"] .f-input[type="time"]::-webkit-calendar-picker-indicator { filter: none; }
-
-html, body { height: 100%; width: 100%; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg-base); color: var(--text-main); transition: background 0.3s, color 0.3s; }
-
-/* Dynamic CSS Blurred Mesh Background */
-.bg { position: fixed; inset: 0; z-index: 0; background: var(--bg-base); transition: background 0.4s ease; overflow: hidden;}
-.bg::before, .bg::after { content: ''; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; transition: background 0.6s ease; pointer-events: none; }
-.bg::before { top: -10%; left: -10%; width: 60vw; height: 60vw; background: var(--bg-accent1); }
-.bg::after { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: var(--bg-accent2); }
-.bg-overlay { position: fixed; inset: 0; z-index: 1; background: var(--overlay); backdrop-filter: blur(60px); -webkit-backdrop-filter: blur(60px); transition: background 0.3s; }
-
-.page { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.5s cubic-bezier(.4,0,.2,1); }
-.page.active { opacity: 1; pointer-events: all; }
-
-/* ==========================================
-   LOGIN PAGE
-============================================ */
-#page-login { flex-direction: column; gap: 0; }
-.portal-title { text-align: center; margin-bottom: 32px; animation: slideDown 0.75s cubic-bezier(.22,1,.36,1) both; }
-.portal-name { font-family: 'Instrument Serif', serif; font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 400; color: var(--text-main); line-height: 1.1; letter-spacing: -0.01em; text-shadow: 0 4px 40px rgba(0,0,0,0.2); }
-.portal-name em { font-style: italic; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-
-.login-card {
-  width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius-card); padding: 40px 36px 36px;
-  backdrop-filter: blur(32px) saturate(1.5); -webkit-backdrop-filter: blur(32px) saturate(1.5);
-  box-shadow: var(--card-shadow), 0 2px 0 rgba(255,255,255,0.05) inset;
-  animation: floatUp 0.85s cubic-bezier(.22,1,.36,1) 0.1s both; position: relative; overflow: hidden;
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-}
-
-.card-header { text-align: center; margin-bottom: 28px; }
-.card-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; color: var(--text-main); }
-.card-header p { font-size: 0.82rem; color: var(--text-muted); }
-
-.l-field { margin-bottom: 17px; }
-.l-field label { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
-.l-field input {
-  width: 100%; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-input);
-  padding: 13px 17px; color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.92rem;
-  outline: none; transition: all 0.22s; appearance: none;
-}
-.l-field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--input-focus); background: var(--input-bg); }
-.l-field input::placeholder { color: var(--text-muted); opacity: 0.5; }
-
-.btn-continue, .f-btn, .esc-btn-submit {
-  width: 100%; margin-top: 8px; padding: 14px;
-  background: var(--primary-gradient);
-  border: none; border-radius: 13px; color: #fff; font-family: 'Inter', sans-serif;
-  font-size: 0.92rem; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 24px var(--input-focus), 0 1px 0 rgba(255,255,255,0.16) inset;
-  position: relative; overflow: hidden;
-}
-.f-btn, .esc-btn-submit { margin-top: 6px; padding: 13px; }
-.btn-continue::after, .f-btn::before, .esc-btn-submit::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.13) 0%, transparent 55%); pointer-events: none; }
-.btn-continue:hover, .f-btn:hover, .esc-btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 36px var(--input-focus); }
-.btn-continue:active, .f-btn:active, .esc-btn-submit:active { transform: translateY(0); }
-.btn-continue:disabled, .f-btn:disabled, .esc-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-/* ==========================================
-   DASHBOARD SHELL
-============================================ */
-#page-dashboard { align-items: stretch; flex-direction: column; padding: 0; overflow: hidden; }
-.topbar { height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--topbar-bg); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); z-index: 20; position: relative; transition: background 0.3s, border-color 0.3s; }
-.topbar-brand { font-family: 'Instrument Serif', serif; font-size: 1.08rem; color: var(--text-main); letter-spacing: -0.01em; }
-.topbar-user { display: flex; align-items: center; gap: 11px; }
-
-.theme-btn { background: var(--icon-bg); border: 1px solid var(--border-light); color: var(--primary); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-.theme-btn:hover { background: var(--item-hover); transform: scale(1.05); }
-
-.user-chip { display: flex; align-items: center; gap: 8px; background: var(--icon-bg); border: 1px solid var(--border-light); border-radius: 40px; padding: 4px 10px 4px 5px; cursor: pointer; transition: all 0.2s; user-select: none; }
-.user-chip:hover { background: var(--item-hover); }
-.user-avatar { width: 27px; height: 27px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: #fff; flex-shrink: 0; }
-.user-name { font-size: 0.78rem; font-weight: 600; color: var(--text-main); line-height: 1.1; }
-.user-emp { font-size: 0.62rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; line-height: 1.1; }
-
-.user-dropdown {
-  position: absolute; top: calc(100% + 12px); right: 0;
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-  border-radius: 14px; width: 220px; padding: 8px 0;
-  box-shadow: var(--card-shadow);
-  opacity: 0; pointer-events: none; transform: translateY(-10px);
-  transition: all 0.2s cubic-bezier(.22,1,.36,1); z-index: 100;
-}
-.user-dropdown.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-.dropdown-header { padding: 8px 16px 4px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 700; }
-.dropdown-item { padding: 10px 16px; font-size: 0.85rem; font-weight: 500; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s; user-select: none;}
-.dropdown-item:hover { background: var(--item-hover); }
-.dropdown-divider { height: 1px; background: var(--border-light); margin: 6px 0; }
-.theme-dot { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset; flex-shrink: 0; }
-.text-danger { color: var(--danger-text); }
-.text-danger:hover { background: var(--danger-bg); }
-
-.dash-body { flex: 1; display: flex; overflow: hidden; }
-.sidebar { width: 208px; flex-shrink: 0; background: var(--sidebar-bg); backdrop-filter: blur(20px); border-right: 1px solid var(--border-light); padding: 16px 0; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; transition: background 0.3s, border-color 0.3s; }
-.sidebar-section { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 14px 16px 6px; margin-top: 4px; opacity: 0.7; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 0.84rem; font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; border-radius: 0 9px 9px 0; margin-right: 9px; }
-.nav-item:hover { color: var(--text-main); background: var(--item-hover); }
-.nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--icon-bg); font-weight: 600; }
-.nav-icon { width: 29px; height: 29px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; background: var(--input-bg); transition: all 0.2s; color: inherit; }
-.nav-item.active .nav-icon { background: var(--primary-gradient); color: #fff; }
-
-.dash-content { flex: 1; overflow-y: auto; padding: 26px 30px 60px; }
-::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 99px; }
-
-/* Panel switch & headers */
-.form-panel { display: none; }
-.form-panel.active { display: block; animation: fadeUp 0.4s cubic-bezier(.22,1,.36,1) both; }
-.panel-header { margin-bottom: 22px; }
-.panel-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--primary); background: var(--icon-bg); border: 1px solid var(--border-light); border-radius: 20px; padding: 3px 11px; margin-bottom: 10px; }
-.panel-title { font-family: 'Instrument Serif', serif; font-size: 1.85rem; color: var(--text-main); font-weight: 400; letter-spacing: -0.02em; margin-bottom: 4px; }
-.panel-sub { font-size: 0.83rem; color: var(--text-muted); }
-
-/* ==========================================
-   FORMS & SHARED INPUTS
-============================================ */
-.esc-wrap, .f-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 26px 28px 28px; backdrop-filter: blur(24px); box-shadow: var(--card-shadow), 0 0 0 1px rgba(255,255,255,0.03) inset; position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s; }
-.esc-wrap::before, .f-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); pointer-events: none; }
-.esc-agent-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-.esc-agent-strip label, .esc-field label, .f-label { font-size: 0.67rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: block; }
-.esc-agent-val { width: 100%; background: var(--icon-bg); border: 1.5px solid var(--border-light); border-radius: 11px; padding: 11px 14px; color: var(--primary); font-weight: 600; font-size: 0.87rem; }
-.esc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 26px; }
-.esc-full { grid-column: 1 / -1; }
-.esc-field { display: flex; flex-direction: column; gap: 7px; }
-.req { color: var(--primary); margin-left: 3px; font-size: 0.8em; }
-.esc-field input, .esc-field textarea, .esc-field select, .f-input, .f-select, .f-textarea {
-  width: 100%; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 11px; padding: 11px 14px; color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.87rem; outline: none; transition: all .2s; appearance: none;
-}
-.esc-field input[type="date"]::-webkit-calendar-picker-indicator, .f-input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
-.esc-field input::placeholder, .esc-field textarea::placeholder, .f-input::placeholder { color: var(--text-muted); opacity: 0.5; }
-.esc-field input:focus, .esc-field textarea:focus, .esc-field select:focus, .f-input:focus, .f-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--input-focus); background: var(--input-bg); }
-.esc-field textarea, .f-textarea { resize: vertical; min-height: 100px; }
-.esc-select-wrap, .f-select-wrap { position: relative; }
-.esc-select-wrap::after, .f-select-wrap::after { content: ''; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid var(--text-muted); pointer-events: none; }
-.esc-select-wrap:focus-within::after, .f-select-wrap:focus-within::after { border-top-color: var(--primary); }
-.esc-field select, .f-select { cursor: pointer; padding-right: 36px; }
-.esc-field select option, .f-select option { background: var(--bg-base); color: var(--text-main); }
-.esc-case-type-group, .f-radio-group { display: flex; gap: 9px; flex-wrap: wrap; }
-.esc-case-type-group input[type="radio"], .f-radio-opt input[type=radio] { display: none; }
-.esc-case-type-group label, .f-radio-opt label {
-  display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 17px;
-  background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 10px;
-  font-size: 0.82rem; font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.2s; user-select: none;
-}
-.f-radio-opt label { flex: 1; min-width: 70px; }
-.esc-case-type-group label::before, .f-radio-dot { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--text-muted); flex-shrink: 0; transition: all 0.2s; opacity: 0.5; }
-.esc-case-type-group input[type="radio"]:checked + label, .f-radio-opt input[type=radio]:checked + label { background: var(--icon-bg); border-color: var(--primary); color: var(--text-main); box-shadow: 0 0 0 2px var(--icon-bg); }
-.esc-case-type-group input[type="radio"]:checked + label::before, .f-radio-opt input[type=radio]:checked + label .f-radio-dot { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 6px var(--primary); opacity: 1; }
-
-.esc-divider { grid-column: 1 / -1; height: 1px; background: linear-gradient(90deg, transparent, var(--border-light), transparent); margin: 4px 0; border: none; }
-.esc-section-label, .f-section-title { grid-column: 1 / -1; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; margin-top: 2px; display: flex; align-items: center; gap: 10px; }
-.esc-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border-light), transparent); }
-.esc-actions { grid-column: 1 / -1; display: flex; gap: 11px; align-items: center; margin-top: 6px; }
-.esc-btn-reset { padding: 13px 19px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-weight: 600; }
-.esc-btn-reset:hover { border-color: var(--primary); color: var(--text-main); background: var(--item-hover); }
-
-.f-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border-light), transparent); margin: 18px 0; }
-.f-field { margin-bottom: 15px; }
-.f-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 15px; }
-.f-input[readonly] { background: var(--icon-bg); border-color: var(--border-light); color: var(--primary); font-weight: 600; cursor: default; }
-
-/* Case Table */
-.f-table-wrap { margin-top: 18px; border-radius: 15px; overflow: hidden; border: 1px solid var(--card-border); background: var(--card-bg); backdrop-filter: blur(20px); transition: background 0.3s, border-color 0.3s; }
-.f-table-head { padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-light); background: var(--item-hover); }
-.f-table-head span { font-size: 0.61rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.13em; text-transform: uppercase; }
-.f-bdg { background: var(--icon-bg); color: var(--primary); border-radius: 20px; padding: 2px 10px; font-size: 0.67rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-table { width: 100%; border-collapse: collapse; font-size: 0.77rem; }
-thead th { padding: 8px 12px; text-align: left; font-size: 0.6rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--border-light); }
-tbody tr { border-bottom: 1px solid var(--border-light); transition: background .15s; }
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: var(--item-hover); }
-td { padding: 9px 12px; color: var(--text-main); }
-.f-mono { font-family: 'JetBrains Mono', monospace; color: var(--primary); font-size: 0.69rem; font-weight: 600; }
-.f-obadge span { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; background: var(--icon-bg); color: var(--primary); border: 1px solid var(--border-light); }
-.f-empty { padding: 26px; text-align: center; color: var(--text-muted); font-size: 0.82rem; }
-
-.f-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Toasts */
-#portal-toast, #esc-toast { position: fixed; left: 50%; z-index: 9999; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
-#portal-toast { bottom: 24px; transform: translateX(-50%) translateY(14px); background: var(--topbar-bg); backdrop-filter: blur(16px); border: 1px solid var(--border-light); color: var(--text-main); font-size: 0.82rem; font-weight: 600; padding: 10px 22px; border-radius: 40px; box-shadow: var(--card-shadow); }
-#portal-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: all; }
-#portal-toast.ok { border-color: rgba(52,211,153,0.5); color: var(--success-text); }
-#portal-toast.err { border-color: rgba(248,113,113,0.5); color: var(--danger-text); }
-
-#esc-toast { bottom: 28px; transform: translateX(-50%) translateY(80px); background: var(--topbar-bg); border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 22px; font-size: 13px; color: var(--text-main); font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: var(--card-shadow); }
-#esc-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: all; }
-
-/* Animations */
-@keyframes slideDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes floatUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Responsiveness */
-@media (max-width: 640px) {
-  .sidebar { width: 52px; }
-  .nav-item span, .sidebar-section { display: none; }
-  .dash-content { padding: 16px 12px 40px; }
-  .esc-wrap, .f-card { padding: 24px 18px; }
-  .esc-grid, .f-field-row, .esc-agent-strip { grid-template-columns: 1fr; }
-  .esc-full { grid-column: auto; }
-  .esc-actions { flex-direction: column; }
-}
-
-/* ==========================================
-   WEBSITES & ADMIN PANELS STYLING
-============================================ */
-.web-grid { display: flex; flex-direction: column; gap: 8px; }
-.web-section-label { font-size: 0.67rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); padding: 14px 0 4px; display: flex; align-items: center; gap: 10px; }
-.web-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-light), transparent); }
-.web-card { display: flex; align-items: center; gap: 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px 20px; cursor: pointer; text-decoration: none; transition: all 0.2s; backdrop-filter: blur(20px); position: relative; overflow: hidden; }
-.web-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent); }
-.web-card:hover { border-color: var(--primary); background: var(--item-hover); transform: translateX(4px); box-shadow: var(--card-shadow); }
-.web-card-icon { width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0; background: var(--icon-bg); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; color: var(--primary); transition: all 0.2s; }
-.web-card:hover .web-card-icon { background: var(--primary); color: #fff; border-color: var(--primary); }
-.web-card-body { flex: 1; min-width: 0; }
-.web-card-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 3px; letter-spacing: -0.01em; }
-.web-card-url { font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.web-card-arrow { color: var(--text-muted); flex-shrink: 0; transition: all 0.2s; opacity: 0.6; }
-.web-card:hover .web-card-arrow { color: var(--primary); transform: translate(2px,-2px); opacity: 1; }
-
-.admin-emp-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
-.admin-emp-row { display: flex; align-items: center; justify-content: space-between; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 14px; }
-.admin-emp-info { display: flex; flex-direction: column; gap: 2px; }
-.admin-emp-id { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--primary); font-weight: 700; }
-.admin-emp-name { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-.admin-remove-btn { background: var(--danger-bg); border: 1px solid var(--border-light); border-radius: 7px; padding: 4px 11px; color: var(--danger-text); font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-.admin-remove-btn:hover { background: var(--danger-text); color: #fff; }
-.admin-danger-btn, .admin-lock-btn { flex: 1; padding: 10px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.admin-danger-btn { background: var(--danger-bg); border: 1px solid var(--border-light); color: var(--danger-text); }
-.admin-danger-btn:hover { background: var(--danger-text); color: #fff; }
-.admin-lock-btn { background: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-muted); }
-.admin-lock-btn:hover { background: var(--item-hover); color: var(--primary); border-color: var(--primary); }
-.admin-empty { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.82rem; }
-.admin-tab-btn { background: var(--input-bg); border: 1.5px solid var(--card-border); border-radius: 9px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; padding: 7px 14px; cursor: pointer; transition: all .2s; }
-.admin-tab-btn:hover { background: var(--item-hover); color: var(--text-main); }
-.admin-tab-btn.active { background: var(--icon-bg); border-color: var(--primary); color: var(--primary); }
-</style>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="themes.css" />
 </head>
+
 <body data-theme="default" data-mode="dark">
 
-<div class="bg" id="bg-el"></div>
-<div class="bg-overlay"></div>
-
-<!-- PAGE 1 — LOGIN -->
-<main class="page active" id="page-login">
-  <div>
-    <div class="portal-title">
-      <h1 class="portal-name">Philips Support <em>Portal</em></h1>
-    </div>
-    <section class="login-card">
-      <header class="card-header">
-        <h2>Get Started</h2>
-        <p>Enter your details to access the portal</p>
-      </header>
-      <div class="l-field">
-        <label for="inp-name">Full Name</label>
-        <input type="text" id="inp-name" autocomplete="off"/>
-      </div>
-      <div class="l-field">
-        <label for="inp-emp">Employee ID</label>
-        <input type="text" id="inp-emp" autocomplete="off"/>
-      </div>
-      <button class="btn-continue" onclick="doLogin()">Continue &nbsp;→</button>
-    </section>
+  <div class="bg" id="bg-el">
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
   </div>
-</main>
+  <div class="bg-overlay"></div>
 
-<!-- PAGE 2 — DASHBOARD -->
-<main class="page" id="page-dashboard">
-
-  <header class="topbar">
-    <div class="topbar-brand">Philips Support Portal</div>
-    
-    <div class="topbar-user">
-      <button id="theme-toggle" class="theme-btn" onclick="toggleMode()" title="Toggle Light/Dark Mode">
-        <span id="theme-icon"></span>
-      </button>
-
-      <button id="topbar-admin-btn" onclick="showPanel('admin')" style="display:none;background:var(--icon-bg);border:1px solid var(--border-light);color:var(--primary);padding:6px 14px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;">Admin</button>
-      
-      <div class="user-dropdown-wrapper">
-        <div class="user-chip" id="user-menu-btn" onclick="toggleUserMenu(event)">
-          <div class="user-avatar" id="dash-avatar">?</div>
-          <div>
-            <div class="user-name" id="dash-name">—</div>
-            <div class="user-emp" id="dash-emp">—</div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:4px; opacity:0.6"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </div>
-
-        <div class="user-dropdown" id="user-dropdown">
-          <div class="dropdown-header">Theme Color</div>
-          <div class="dropdown-item" onclick="setTheme('default')"><span class="theme-dot" style="background: #3b82f6"></span> Default Blue</div>
-          <div class="dropdown-item" onclick="setTheme('sunset')"><span class="theme-dot" style="background: linear-gradient(135deg, #D95E3D, #C94C74)"></span> Sunset</div>
-          <div class="dropdown-item" onclick="setTheme('aurora')"><span class="theme-dot" style="background: linear-gradient(135deg, #0077A8, #009E6F)"></span> Aurora</div>
-          <div class="dropdown-item" onclick="setTheme('nebula')"><span class="theme-dot" style="background: linear-gradient(135deg, #2E5CA8, #6A3FAE)"></span> Nebula</div>
-          <div class="dropdown-item" onclick="setTheme('carbon')"><span class="theme-dot" style="background: linear-gradient(135deg, #E8E8E8, #707070)"></span> Carbon</div>
-          <div class="dropdown-item" onclick="setTheme('emerald')"><span class="theme-dot" style="background: linear-gradient(135deg, #006D2C, #A1D99B)"></span> Emerald Grove</div>
-          <div class="dropdown-divider"></div>
-          <div class="dropdown-item text-danger" onclick="doLogout()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Sign Out
-          </div>
-        </div>
+  <!-- PAGE 1 — LOGIN -->
+  <main class="page active" id="page-login">
+    <div>
+      <div class="portal-title">
+        <h1 class="portal-name">Philips Support <em>Portal</em></h1>
       </div>
+      <section class="login-card">
+        <header class="card-header">
+          <h2>Get Started</h2>
+          <p>Enter your details to access the portal</p>
+        </header>
+        <div class="l-field">
+          <label for="inp-name">Full Name</label>
+          <input type="text" id="inp-name" autocomplete="off" />
+        </div>
+        <div class="l-field">
+          <label for="inp-emp">Employee ID</label>
+          <input type="text" id="inp-emp" autocomplete="off" />
+        </div>
+        <button class="btn-continue" onclick="doLogin()">Continue &nbsp;→</button>
+      </section>
     </div>
-  </header>
+  </main>
 
-  <div class="dash-body">
-    <aside class="sidebar">
-      <div class="sidebar-section">Forms</div>
-      <nav style="display:flex; flex-direction:column; flex:1;">
-        <div class="nav-item active" onclick="showPanel('escalation')" id="nav-escalation">
-          <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-          <span>Escalation</span>
-        </div>
-        <div class="nav-item" onclick="showPanel('productivity')" id="nav-productivity">
-          <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-          <span>Email Productivity</span>
-        </div>
-        <div class="nav-item" onclick="showPanel('cases')" id="nav-cases">
-          <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-          <span>Case Submission</span>
-        </div>
-        <!-- ALL USERS CAN NOW SEE THE CALL BACK FORM -->
-        <div class="nav-item" onclick="showPanel('callback')" id="nav-callback">
-          <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
-          <span>Call Back</span>
-        </div>
+  <!-- PAGE 2 — DASHBOARD -->
+  <main class="page" id="page-dashboard">
 
-        <div class="sidebar-section" style="margin-top:8px">Quick Links</div>
-        <div class="nav-item" onclick="showPanel('websites')" id="nav-websites">
-          <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-          <span>Websites</span>
-        </div>
-      </nav>
-    </aside>
+    <header class="topbar">
+      <div class="topbar-brand">Philips Support Portal</div>
 
-    <section class="dash-content">
+      <div class="topbar-user">
+        <button id="theme-toggle" class="theme-btn" onclick="toggleMode()" title="Toggle Light/Dark Mode">
+          <span id="theme-icon"></span>
+        </button>
 
-      <!-- ESCALATION FORM -->
-      <div class="form-panel active" id="panel-escalation">
-        <header class="panel-header">
-          <div class="panel-tag">Escalation</div>
-          <h2 class="panel-title">Escalation Form</h2>
-          <div class="panel-sub">Submit and track case escalations across all support channels.</div>
-        </header>
+        <button id="topbar-admin-btn" onclick="showPanel('admin')"
+          style="display:none;background:var(--icon-bg);border:1px solid var(--border-light);color:var(--primary);padding:6px 14px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;">Admin</button>
 
-        <div class="esc-wrap">
-          <div class="esc-agent-strip">
-            <div class="esc-agent-item">
-              <label>Agent Name</label>
-              <div class="esc-agent-val auto-name-txt">—</div>
+        <div class="user-dropdown-wrapper" id="noti-wrapper">
+          <button id="noti-btn" class="theme-btn" onclick="toggleNotiMenu(event)" title="Notifications"
+            style="position:relative">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="noti-badge"
+              style="position:absolute;top:-2px;right:-2px;background:var(--danger-text);color:#fff;font-size:0.55rem;font-weight:bold;border-radius:50%;width:14px;height:14px;display:none;align-items:center;justify-content:center;">0</span>
+          </button>
+          <div class="user-dropdown" id="noti-dropdown" style="width:280px">
+            <div class="dropdown-header" style="display:flex;justify-content:space-between;align-items:center">
+              <span>Notifications</span>
+              <span style="cursor:pointer;color:var(--primary);text-transform:none;font-weight:600;font-size:0.7rem"
+                onclick="clearNotifications()">Clear All</span>
             </div>
-            <div class="esc-agent-item">
-              <label>Employee ID</label>
-              <div class="esc-agent-val auto-emp-txt">—</div>
+            <div class="dropdown-divider"></div>
+            <div id="noti-list" style="max-height:300px;overflow-y:auto">
+              <div style="padding:16px;text-align:center;font-size:0.8rem;color:var(--text-muted)">No new notifications
+              </div>
             </div>
           </div>
+        </div>
 
-          <form id="escalationForm">
-            <div class="esc-grid">
-              <div class="esc-section-label esc-full">Case Details</div>
-              <div class="esc-field">
-                <label>Case Number <span class="req">*</span></label>
-                <input type="text" id="esc-caseNumber" placeholder="e.g. CASE-20240001" required/>
-              </div>
-              <div class="esc-field">
-                <label>Workshop <span class="req">*</span></label>
-                <input type="text" id="esc-workshop" placeholder="Workshop name or ID" required/>
-              </div>
-              <div class="esc-field esc-full">
-                <label>Case Registration Date <span class="req">*</span></label>
-                <input type="date" id="esc-caseDate" required/>
-              </div>
+        <div class="user-dropdown-wrapper">
+          <div class="user-chip" id="user-menu-btn" onclick="toggleUserMenu(event)">
+            <div class="user-avatar" id="dash-avatar">?</div>
+            <div>
+              <div class="user-name" id="dash-name">—</div>
+              <div class="user-emp" id="dash-emp">—</div>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-left:4px; opacity:0.6">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
 
-              <hr class="esc-divider"/>
-              <div class="esc-section-label esc-full">Escalation Info</div>
-              <div class="esc-field esc-full">
-                <label>Escalation Reason <span class="req">*</span></label>
-                <div class="esc-select-wrap">
-                  <select id="esc-escalationReason" required>
-                    <option value="" disabled selected>Select a reason</option>
-                    <option>Awaiting Consumer Confirmation</option>
-                    <option>No-Call back from service centre</option>
-                    <option>Delay in replacement approval</option>
-                    <option>False Closure</option>
-                    <option>False Cancellation</option>
-                    <option>Replacement issue</option>
-                    <option>Spare part issue</option>
-                    <option>Upcountry issue</option>
-                    <option>Local Issue</option>
-                    <option>Multiple consumer follow-ups</option>
-                    <option>Behaviour of service centre</option>
-                    <option>Other</option>
-                  </select>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="dropdown-header">Theme Color</div>
+            <div class="dropdown-item" onclick="setTheme('default')"><span class="theme-dot"
+                style="background: #3b82f6"></span> Default Blue</div>
+            <div class="dropdown-item" onclick="setTheme('sunset')"><span class="theme-dot"
+                style="background: linear-gradient(135deg, #D95E3D, #C94C74)"></span> Sunset</div>
+            <div class="dropdown-item" onclick="setTheme('aurora')"><span class="theme-dot"
+                style="background: linear-gradient(135deg, #0077A8, #009E6F)"></span> Aurora</div>
+            <div class="dropdown-item" onclick="setTheme('nebula')"><span class="theme-dot"
+                style="background: linear-gradient(135deg, #2E5CA8, #6A3FAE)"></span> Nebula</div>
+            <div class="dropdown-item" onclick="setTheme('carbon')"><span class="theme-dot"
+                style="background: linear-gradient(135deg, #E8E8E8, #707070)"></span> Carbon</div>
+            <div class="dropdown-item" onclick="setTheme('emerald')"><span class="theme-dot"
+                style="background: linear-gradient(135deg, #006D2C, #A1D99B)"></span> Emerald Grove</div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item text-danger" onclick="doLogout()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Sign Out
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dash-body">
+      <aside class="sidebar">
+        <div class="sidebar-section">Forms</div>
+        <nav style="display:flex; flex-direction:column; flex:1;">
+          <div class="nav-item active" onclick="showPanel('escalation')" id="nav-escalation">
+            <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg></div>
+            <span>Escalation</span>
+          </div>
+          <div class="nav-item" onclick="showPanel('productivity')" id="nav-productivity">
+            <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <polyline points="2,4 12,13 22,4" />
+              </svg></div>
+            <span>Email Productivity</span>
+          </div>
+          <div class="nav-item" onclick="showPanel('cases')" id="nav-cases">
+            <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg></div>
+            <span>Case Submission</span>
+          </div>
+          <!-- ALL USERS CAN NOW SEE THE CALL BACK FORM -->
+          <div class="nav-item" onclick="showPanel('callback')" id="nav-callback">
+            <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg></div>
+            <span>Call Back</span>
+          </div>
+
+          <div class="sidebar-section" style="margin-top:8px">Quick Links</div>
+          <div class="nav-item" onclick="showPanel('websites')" id="nav-websites">
+            <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg></div>
+            <span>Websites</span>
+          </div>
+          <div class="nav-item" onclick="showPanel('help')" id="nav-help">
+            <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg></div>
+            <span>Help Support</span>
+          </div>
+        </nav>
+      </aside>
+
+      <section class="dash-content">
+
+        <!-- ESCALATION FORM -->
+        <div class="form-panel active" id="panel-escalation">
+          <header class="panel-header">
+            <div class="panel-tag">Escalation</div>
+            <h2 class="panel-title">Escalation Form</h2>
+            <div class="panel-sub">Submit and track case escalations across all support channels.</div>
+          </header>
+
+          <div class="esc-wrap">
+            <div class="esc-agent-strip">
+              <div class="esc-agent-item">
+                <label>Agent Name</label>
+                <div class="esc-agent-val auto-name-txt">—</div>
+              </div>
+              <div class="esc-agent-item">
+                <label>Employee ID</label>
+                <div class="esc-agent-val auto-emp-txt">—</div>
+              </div>
+            </div>
+
+            <form id="escalationForm">
+              <div class="esc-grid">
+                <div class="esc-section-label esc-full">Case Details</div>
+                <div class="esc-field">
+                  <label>Case Number <span class="req">*</span></label>
+                  <input type="text" id="esc-caseNumber" placeholder="e.g. CASE-20240001" required />
+                </div>
+                <div class="esc-field">
+                  <label>Workshop <span class="req">*</span></label>
+                  <input type="text" id="esc-workshop" placeholder="Workshop name or ID" required />
+                </div>
+                <div class="esc-field esc-full">
+                  <label>Case Registration Date <span class="req">*</span></label>
+                  <input type="date" id="esc-caseDate" required />
+                </div>
+
+                <hr class="esc-divider" />
+                <div class="esc-section-label esc-full">Escalation Info</div>
+                <div class="esc-field esc-full">
+                  <label>Escalation Reason <span class="req">*</span></label>
+                  <div class="esc-select-wrap">
+                    <select id="esc-escalationReason" required>
+                      <option value="" disabled selected>Select a reason</option>
+                      <option>Awaiting Consumer Confirmation</option>
+                      <option>No-Call back from service centre</option>
+                      <option>Delay in replacement approval</option>
+                      <option>False Closure</option>
+                      <option>False Cancellation</option>
+                      <option>Replacement issue</option>
+                      <option>Spare part issue</option>
+                      <option>Upcountry issue</option>
+                      <option>Local Issue</option>
+                      <option>Multiple consumer follow-ups</option>
+                      <option>Behaviour of service centre</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="esc-field esc-full">
+                  <label>Agent Remarks <span class="req">*</span></label>
+                  <textarea id="esc-agentRemarks" placeholder="Mention The Consumer Voice" required></textarea>
+                </div>
+
+                <hr class="esc-divider" />
+                <div class="esc-section-label esc-full">Case Type</div>
+                <div class="esc-field esc-full">
+                  <label>Select Case Type <span class="req">*</span></label>
+                  <div class="esc-case-type-group">
+                    <input type="radio" id="typeAvent" name="caseType" value="Avent" required />
+                    <label for="typeAvent">Avent</label>
+                    <input type="radio" id="typeQuality" name="caseType" value="Quality" />
+                    <label for="typeQuality">Quality</label>
+                    <input type="radio" id="typeSafety" name="caseType" value="Safety" />
+                    <label for="typeSafety">Safety</label>
+                  </div>
+                </div>
+
+                <div class="esc-actions">
+                  <button type="submit" class="esc-btn-submit" id="escSubmitBtn">Submit Escalation</button>
+                  <button type="button" class="esc-btn-reset" onclick="resetEscalation()">Clear</button>
                 </div>
               </div>
-              <div class="esc-field esc-full">
-                <label>Agent Remarks <span class="req">*</span></label>
-                <textarea id="esc-agentRemarks" placeholder="Mention The Consumer Voice" required></textarea>
+            </form>
+          </div>
+        </div>
+
+        <!-- EMAIL PRODUCTIVITY FORM -->
+        <div class="form-panel" id="panel-productivity">
+          <header class="panel-header">
+            <div class="panel-tag">Productivity</div>
+            <h2 class="panel-title">Email Productivity Tracker</h2>
+            <div class="panel-sub">Log your email productivity entries for the Case Management System.</div>
+          </header>
+          <div class="f-card">
+            <div class="f-section-title">Session Details</div>
+            <div class="f-field-row">
+              <div>
+                <label class="f-label">Agent Name</label>
+                <input class="f-input auto-name" type="text" readonly placeholder="Auto-filled" />
               </div>
-
-              <hr class="esc-divider"/>
-              <div class="esc-section-label esc-full">Case Type</div>
-              <div class="esc-field esc-full">
-                <label>Select Case Type <span class="req">*</span></label>
-                <div class="esc-case-type-group">
-                  <input type="radio" id="typeAvent" name="caseType" value="Avent" required/>
-                  <label for="typeAvent">Avent</label>
-                  <input type="radio" id="typeQuality" name="caseType" value="Quality"/>
-                  <label for="typeQuality">Quality</label>
-                  <input type="radio" id="typeSafety" name="caseType" value="Safety"/>
-                  <label for="typeSafety">Safety</label>
-                </div>
-              </div>
-
-              <div class="esc-actions">
-                <button type="submit" class="esc-btn-submit" id="escSubmitBtn">Submit Escalation</button>
-                <button type="button" class="esc-btn-reset" onclick="resetEscalation()">Clear</button>
+              <div>
+                <label class="f-label">Employee ID</label>
+                <input class="f-input auto-emp" type="text" readonly placeholder="Auto-filled" />
               </div>
             </div>
-          </form>
+            <div class="f-field" style="margin-bottom:15px">
+              <label class="f-label">Origin <span class="req">*</span></label>
+              <div class="f-radio-group">
+                <div class="f-radio-opt"><input type="radio" id="prod-web" name="prodOrigin" value="Web" /><label
+                    for="prod-web"><span class="f-radio-dot"></span>Web</label></div>
+                <div class="f-radio-opt"><input type="radio" id="prod-email" name="prodOrigin" value="Email" /><label
+                    for="prod-email"><span class="f-radio-dot"></span>Email</label></div>
+                <div class="f-radio-opt"><input type="radio" id="prod-eshop" name="prodOrigin" value="Eshop" /><label
+                    for="prod-eshop"><span class="f-radio-dot"></span>Eshop</label></div>
+              </div>
+            </div>
+            <div class="f-field-row">
+              <div>
+                <label class="f-label">Case Number <span class="req">*</span></label>
+                <input class="f-input" type="text" id="prod-case" autocomplete="off" />
+              </div>
+              <div>
+                <label class="f-label">Date <span class="req">*</span></label>
+                <input class="f-input" type="date" id="prod-date" />
+              </div>
+            </div>
+            <div class="f-field">
+              <label class="f-label">Email Address <span class="req">*</span></label>
+              <input class="f-input" type="email" id="prod-email-addr" placeholder="e.g. name@example.com"
+                autocomplete="off" />
+            </div>
+            <button class="f-btn" id="prodSubmitBtn" onclick="submitProductivity()">Submit Entry &nbsp;→</button>
+          </div>
         </div>
-      </div>
 
-      <!-- EMAIL PRODUCTIVITY FORM -->
-      <div class="form-panel" id="panel-productivity">
-        <header class="panel-header">
-          <div class="panel-tag">Productivity</div>
-          <h2 class="panel-title">Email Productivity Tracker</h2>
-          <div class="panel-sub">Log your email productivity entries for the Case Management System.</div>
-        </header>
-        <div class="f-card">
-          <div class="f-section-title">Session Details</div>
-          <div class="f-field-row">
-            <div>
-              <label class="f-label">Agent Name</label>
-              <input class="f-input auto-name" type="text" readonly placeholder="Auto-filled"/>
-            </div>
-            <div>
-              <label class="f-label">Employee ID</label>
-              <input class="f-input auto-emp" type="text" readonly placeholder="Auto-filled"/>
-            </div>
-          </div>
-          <div class="f-field" style="margin-bottom:15px">
-            <label class="f-label">Origin <span class="req">*</span></label>
-            <div class="f-radio-group">
-              <div class="f-radio-opt"><input type="radio" id="prod-web" name="prodOrigin" value="Web"/><label for="prod-web"><span class="f-radio-dot"></span>Web</label></div>
-              <div class="f-radio-opt"><input type="radio" id="prod-email" name="prodOrigin" value="Email"/><label for="prod-email"><span class="f-radio-dot"></span>Email</label></div>
-              <div class="f-radio-opt"><input type="radio" id="prod-eshop" name="prodOrigin" value="Eshop"/><label for="prod-eshop"><span class="f-radio-dot"></span>Eshop</label></div>
-            </div>
-          </div>
-          <div class="f-field-row">
-            <div>
-              <label class="f-label">Case Number <span class="req">*</span></label>
-              <input class="f-input" type="text" id="prod-case" autocomplete="off"/>
-            </div>
-            <div>
-              <label class="f-label">Date <span class="req">*</span></label>
-              <input class="f-input" type="date" id="prod-date"/>
-            </div>
-          </div>
-          <div class="f-field">
-            <label class="f-label">Email Address <span class="req">*</span></label>
-            <input class="f-input" type="email" id="prod-email-addr" placeholder="e.g. name@example.com" autocomplete="off"/>
-          </div>
-          <button class="f-btn" id="prodSubmitBtn" onclick="submitProductivity()">Submit Entry &nbsp;→</button>
-        </div>
-      </div>
-
-      <!-- CASE SUBMISSION FORM -->
-      <div class="form-panel" id="panel-cases">
-        <header class="panel-header">
-          <div class="panel-tag">Cases</div>
-          <h2 class="panel-title">Case Submission</h2>
-          <div class="panel-sub">Submit and track new support cases with full details.</div>
-        </header>
-        <div class="f-card">
-          <div class="f-section-title">Agent Information</div>
-          <div class="f-field-row">
-            <div>
-              <label class="f-label">Agent Name</label>
-              <input class="f-input auto-name" type="text" readonly placeholder="Auto-filled"/>
-            </div>
-            <div>
-              <label class="f-label">Employee ID</label>
-              <input class="f-input auto-emp" type="text" readonly placeholder="Auto-filled"/>
-            </div>
-          </div>
-          <div class="f-divider"></div>
-          <div class="f-section-title">Case Details</div>
-          <div class="f-field">
-            <label class="f-label">Case ID <span class="req">*</span></label>
-            <input class="f-input" type="text" id="case-id" placeholder="Enter Case ID" autocomplete="off"/>
-          </div>
-          <div class="f-field">
-            <label class="f-label">Origin <span class="req">*</span></label>
-            <div class="f-select-wrap">
-              <select class="f-input f-select" id="case-origin">
-                <option value="" disabled selected>Select origin</option>
-                <option>Croma</option>
-                <option>Nykaa</option>
-                <option>Firstcry- Portal</option>
-                <option>Firstcry- Email</option>
-                <option>Vijay Sales</option>
-              </select>
-            </div>
-          </div>
-          <button class="f-btn" id="caseSubmitBtn" onclick="submitCase()">Submit Case &nbsp;→</button>
-        </div>
-        <div class="f-table-wrap" id="caseTableWrap" style="display:none">
-          <div class="f-table-head">
-            <span>Submitted Cases</span>
-            <span class="f-bdg" id="caseCnt">0</span>
-          </div>
-          <div id="caseTableBody"><div class="f-empty">No submissions yet.</div></div>
-        </div>
-      </div>
-
-      <!-- SUPERVISOR CALL BACK FORM -->
-      <div class="form-panel" id="panel-callback">
-        <header class="panel-header">
-          <div class="panel-tag">Callback</div>
-          <h2 class="panel-title">Supervisor Call Back</h2>
-          <div class="panel-sub">Request a supervisor callback for a consumer.</div>
-        </header>
-        <div class="f-card">
-          <form id="callbackForm">
+        <!-- CASE SUBMISSION FORM -->
+        <div class="form-panel" id="panel-cases">
+          <header class="panel-header">
+            <div class="panel-tag">Cases</div>
+            <h2 class="panel-title">Case Submission</h2>
+            <div class="panel-sub">Submit and track new support cases with full details.</div>
+          </header>
+          <div class="f-card">
             <div class="f-section-title">Agent Information</div>
             <div class="f-field-row">
               <div>
                 <label class="f-label">Agent Name</label>
-                <input class="f-input auto-name" type="text" readonly placeholder="Auto-filled"/>
+                <input class="f-input auto-name" type="text" readonly placeholder="Auto-filled" />
               </div>
               <div>
                 <label class="f-label">Employee ID</label>
-                <input class="f-input auto-emp" type="text" readonly placeholder="Auto-filled"/>
+                <input class="f-input auto-emp" type="text" readonly placeholder="Auto-filled" />
               </div>
             </div>
             <div class="f-divider"></div>
-            
-            <div class="f-section-title">Callback Details</div>
-            <div class="f-field-row">
-              <div>
-                <label class="f-label">Consumer Contact <span class="req">*</span></label>
-                <input class="f-input" type="tel" id="cb-contact" placeholder="Enter contact number" required/>
-              </div>
-              <div>
-                <label class="f-label">Reference Case <span class="req">*</span></label>
-                <input class="f-input" type="text" id="cb-case" placeholder="Case number" required/>
-              </div>
-            </div>
-            
+            <div class="f-section-title">Case Details</div>
             <div class="f-field">
-              <label class="f-label">Call Back Reason <span class="req">*</span></label>
-              <textarea class="f-textarea" id="cb-reason" placeholder="Describe the reason for callback..." required></textarea>
+              <label class="f-label">Case ID <span class="req">*</span></label>
+              <input class="f-input" type="text" id="case-id" placeholder="Enter Case ID" autocomplete="off" />
             </div>
-            
-            <div class="f-field-row">
-              <div>
-                <label class="f-label">Call Back Time <span class="req">*</span></label>
-                <div class="f-select-wrap">
-                  <select class="f-input f-select" id="cb-time" required>
-                    <option value="" disabled selected>Select urgency</option>
-                    <option>&lt;24 Hours</option>
-                    <option>Same day</option>
-                    <option>Urgent call back needed</option>
-                  </select>
+            <div class="f-field">
+              <label class="f-label">Origin <span class="req">*</span></label>
+              <div class="f-select-wrap">
+                <select class="f-input f-select" id="case-origin">
+                  <option value="" disabled selected>Select origin</option>
+                  <option>Croma</option>
+                  <option>Nykaa</option>
+                  <option>Firstcry- Portal</option>
+                  <option>Firstcry- Email</option>
+                  <option>Vijay Sales</option>
+                </select>
+              </div>
+            </div>
+            <button class="f-btn" id="caseSubmitBtn" onclick="submitCase()">Submit Case &nbsp;→</button>
+          </div>
+          <div class="f-table-wrap" id="caseTableWrap" style="display:none">
+            <div class="f-table-head">
+              <span>Submitted Cases</span>
+              <span class="f-bdg" id="caseCnt">0</span>
+            </div>
+            <div id="caseTableBody">
+              <div class="f-empty">No submissions yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUPERVISOR CALL BACK FORM -->
+        <div class="form-panel" id="panel-callback">
+          <header class="panel-header">
+            <div class="panel-tag">Callback</div>
+            <h2 class="panel-title">Supervisor Call Back</h2>
+            <div class="panel-sub">Request a supervisor callback for a consumer.</div>
+          </header>
+          <div class="f-card">
+            <form id="callbackForm">
+              <div class="f-section-title">Agent Information</div>
+              <div class="f-field-row">
+                <div>
+                  <label class="f-label">Agent Name</label>
+                  <input class="f-input auto-name" type="text" readonly placeholder="Auto-filled" />
+                </div>
+                <div>
+                  <label class="f-label">Employee ID</label>
+                  <input class="f-input auto-emp" type="text" readonly placeholder="Auto-filled" />
                 </div>
               </div>
-              <div>
-                <label class="f-label">Preferred Time <span class="req">*</span></label>
-                <input class="f-input" type="time" id="cb-pref-time" required/>
+              <div class="f-divider"></div>
+
+              <div class="f-section-title">Callback Details</div>
+              <div class="f-field-row">
+                <div>
+                  <label class="f-label">Consumer Contact <span class="req">*</span></label>
+                  <input class="f-input" type="tel" id="cb-contact" placeholder="Enter contact number" required />
+                </div>
+                <div>
+                  <label class="f-label">Reference Case <span class="req">*</span></label>
+                  <input class="f-input" type="text" id="cb-case" placeholder="Case number" required />
+                </div>
               </div>
-            </div>
 
-            <button type="submit" class="f-btn" id="cbSubmitBtn">Submit Request &nbsp;→</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- WEBSITES PANEL -->
-      <div class="form-panel" id="panel-websites">
-        <header class="panel-header">
-          <div class="panel-tag">Websites</div>
-          <h2 class="panel-title">Quick Links</h2>
-          <div class="panel-sub">Frequently used tools and resources — click any card to open.</div>
-        </header>
-        <div class="web-grid">
-          <div class="web-section-label">Login Sites</div>
-          <a href="https://login.aps1.pure.cloud/?rid=DVbq34a3NJKzZWZ3WoxZBNaGWMHGHuKKDeCfSrYQsC4#/authenticate-adv/org/philipsvoicecloudindia" target="_blank" rel="noopener" class="web-card">
-            <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l.89-.89a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 18.92z"/></svg></div>
-            <div class="web-card-body"><div class="web-card-title">Dialer</div><div class="web-card-url">login.aps1.pure.cloud</div></div>
-            <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
-          </a>
-          <a href="https://philipsb2c.lightning.force.com" target="_blank" rel="noopener" class="web-card">
-            <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
-            <div class="web-card-body"><div class="web-card-title">Salesforce</div><div class="web-card-url">philipsb2c.lightning.force.com</div></div>
-            <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
-          </a>
-          <a href="https://mail.radmintec.com" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div class="web-card-body"><div class="web-card-title">Zimbra</div><div class="web-card-url">mail.radmintec.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://philips.csod.com/clientimg/philips/welcome/signoff/signoff.htm" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="web-card-body"><div class="web-card-title">Corner Stone</div><div class="web-card-url">philips.csod.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://hub.challengerinc.com/learn/sign_in?return_to=%2Flearn%2F" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="web-card-body"><div class="web-card-title">Challenger Hub</div><div class="web-card-url">hub.challengerinc.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-
-          <div class="web-section-label">Spare Parts</div>
-          <a href="https://aalap.com/" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div><div class="web-card-body"><div class="web-card-title">Aalap</div><div class="web-card-url">aalap.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://www.sparessale.com/" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="web-card-body"><div class="web-card-title">Spares Sale</div><div class="web-card-url">sparessale.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-
-          <div class="web-section-label">Support Tools</div>
-          <a href="https://www.philips.co.in/content/B2C/en_IN/support-home/warranty/warranty-pe.html" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="web-card-body"><div class="web-card-title">Warranty Policy</div><div class="web-card-url">philips.co.in</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://www.atyourservice.philips.com/Pages/AYSRMS/PostalCodeMapping/default.aspx" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="web-card-body"><div class="web-card-title">Pincode Matcher</div><div class="web-card-url">atyourservice.philips.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://www.philips.co.in/c-w/support-home/service-and-repair" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><div class="web-card-body"><div class="web-card-title">Service Centre Locator</div><div class="web-card-url">philips.co.in</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://tickets.brainbees.com/login" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div><div class="web-card-body"><div class="web-card-title">Firstcry</div><div class="web-card-url">tickets.brainbees.com</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-          <a href="https://consumerhelpline.gov.in/company" target="_blank" rel="noopener" class="web-card"><div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="web-card-body"><div class="web-card-title">NCH</div><div class="web-card-url">consumerhelpline.gov.in</div></div><div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></a>
-        </div>
-      </div>
-
-      <!-- ADMIN PANEL -->
-      <div class="form-panel" id="panel-admin">
-        <header class="panel-header">
-          <div class="panel-tag">Admin</div>
-          <h2 class="panel-title">Authorization Manager</h2>
-          <div class="panel-sub">Manage Admin Users, Portal Users and Restricted Users — all synced to Airtable instantly.</div>
-        </header>
-
-        <!-- Admin PIN gate -->
-        <div id="admin-gate" class="f-card" style="max-width:420px">
-          <div class="f-section-title">Admin Access</div>
-          <div class="f-field">
-            <label class="f-label">Admin PIN <span class="req">*</span></label>
-            <input class="f-input" type="password" id="admin-pin-input" placeholder="Enter admin PIN" autocomplete="off"/>
-          </div>
-          <button class="f-btn" onclick="verifyAdminPin()">Unlock &nbsp;→</button>
-          <div style="margin-top:12px;font-size:0.72rem;color:var(--text-muted);text-align:center">PIN is set by the admin — contact your system admin if locked out.</div>
-        </div>
-
-        <!-- Admin dashboard -->
-        <div id="admin-dashboard" style="display:none">
-          <div class="f-card" style="margin-bottom:18px">
-            <div class="f-section-title">Change Admin PIN</div>
-            <div class="f-field-row">
-              <div>
-                <label class="f-label">New PIN</label>
-                <input class="f-input" type="password" id="new-pin" placeholder="Enter new PIN"/>
+              <div class="f-field">
+                <label class="f-label">Call Back Reason <span class="req">*</span></label>
+                <textarea class="f-textarea" id="cb-reason" placeholder="Describe the reason for callback..."
+                  required></textarea>
               </div>
-              <div>
-                <label class="f-label">Confirm PIN</label>
-                <input class="f-input" type="password" id="confirm-pin" placeholder="Confirm new PIN"/>
-              </div>
-            </div>
-            <button class="f-btn" style="margin-top:4px" onclick="changeAdminPin()">Update PIN &nbsp;→</button>
-          </div>
 
-          <div class="f-card">
-            <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--border-light);padding-bottom:14px">
-              <button class="admin-tab-btn active" id="tab-btn-admins" onclick="switchAdminTab('admins')">👑 Admin Users</button>
-              <button class="admin-tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')">👤 Portal Users</button>
-              <button class="admin-tab-btn" id="tab-btn-restricted" onclick="switchAdminTab('restricted')">🔒 Restricted Users</button>
-            </div>
+              <div class="f-field-row">
+                <div>
+                  <label class="f-label">Call Back Time <span class="req">*</span></label>
+                  <div class="f-select-wrap">
+                    <select class="f-input f-select" id="cb-time" required>
+                      <option value="" disabled selected>Select urgency</option>
+                      <option>&lt;24 Hours</option>
+                      <option>Same day</option>
+                      <option>Urgent call back needed</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label class="f-label">Preferred Time <span class="req">*</span></label>
+                  <input class="f-input" type="time" id="cb-pref-time" required />
+                </div>
+              </div>
 
-            <!-- Admins -->
-            <div id="tab-admins">
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">Can log in without being in Portal Users. Can access Admin panel.</div>
-              <div class="f-field-row" style="margin-bottom:10px">
-                <div><label class="f-label">Employee ID</label><input class="f-input" type="text" id="new-admin-id" placeholder="e.g. RM7028777" autocomplete="off"/></div>
-                <div><label class="f-label">Name (optional)</label><input class="f-input" type="text" id="new-admin-name" placeholder="e.g. John Doe" autocomplete="off"/></div>
-              </div>
-              <button class="f-btn" style="margin-bottom:18px" onclick="addAuthorizedEmp()">Add Admin &nbsp;→</button>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Admin Employees</span>
-                <span id="emp-count" class="f-bdg" style="padding:2px 10px;border-radius:20px;">0</span>
-              </div>
-              <div id="emp-list" class="admin-emp-list"></div>
-              <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);display:flex;gap:10px">
-                <button class="admin-danger-btn" onclick="clearAllEmps()">Clear All Admins</button>
-                <button class="admin-lock-btn" onclick="lockAdmin()">Lock Admin</button>
-              </div>
-            </div>
-
-            <!-- Portal Users -->
-            <div id="tab-users" style="display:none">
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">These employees can log in to the portal. Access: Escalation &amp; Websites only.</div>
-              <div class="f-field-row" style="margin-bottom:10px">
-                <div><label class="f-label">Employee ID</label><input class="f-input" type="text" id="new-user-id" placeholder="e.g. RM7033055" autocomplete="off"/></div>
-                <div><label class="f-label">Name</label><input class="f-input" type="text" id="new-user-name" placeholder="e.g. Ankit Rawat" autocomplete="off"/></div>
-              </div>
-              <button class="f-btn" style="margin-bottom:18px" onclick="addPortalUser()">Add User &nbsp;→</button>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Portal Users</span>
-                <span id="users-count" class="f-bdg" style="padding:2px 10px;border-radius:20px;">0</span>
-              </div>
-              <div id="users-list" class="admin-emp-list"></div>
-            </div>
-
-            <!-- Restricted Users -->
-            <div id="tab-restricted" style="display:none">
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">These employees also get access to Email Productivity &amp; Case Submission forms.</div>
-              <div class="f-field-row" style="margin-bottom:10px">
-                <div><label class="f-label">Employee ID</label><input class="f-input" type="text" id="new-restr-id" placeholder="e.g. RM7032569" autocomplete="off"/></div>
-              </div>
-              <button class="f-btn" style="margin-bottom:18px" onclick="addRestrictedUser()">Add &nbsp;→</button>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Restricted Users</span>
-                <span id="restr-count" class="f-bdg" style="padding:2px 10px;border-radius:20px;">0</span>
-              </div>
-              <div id="restr-list" class="admin-emp-list"></div>
-            </div>
+              <button type="submit" class="f-btn" id="cbSubmitBtn">Submit Request &nbsp;→</button>
+            </form>
           </div>
         </div>
-      </div>
-    </section>
-  </div>
-</main>
-
-<div id="portal-toast"></div>
-<div id="esc-toast"><span id="esc-toast-icon" style="font-size:16px">✅</span><span id="esc-toast-msg">Submitted!</span></div>
-
-<script>
-const $ = id => document.getElementById(id);
-const $$ = sel => document.querySelectorAll(sel);
-
-const ESC_SHEET  = 'https://hook.eu1.make.com/poqodcqm5h3khmskhvwga9ylh82n9pfj';
-const PROD_SHEET = 'https://script.google.com/macros/s/AKfycbw-fm5b_bjvFD8FR2-sHCRNTW-mxqYFSCVTf326u6e2TMc-ewN1Bhn3D-hj2_HgllIcog/exec';
-const CASE_SHEET = 'https://script.google.com/macros/s/AKfycby50lm964MC3UKXDdDORr1pS93pdmGtqB5-NQEstVR6iYQHGErjzps55QRLEMGeUObSMA/exec';
-const CALLBACK_SHEET = 'https://script.google.com/macros/s/AKfycbyWsISnlU3TzYKgxOSoB8gpVznTlbSHYJLNYTbXWcI_DfJ63jjlGegTjfli_NbxoKyaoQ/exec';
-
-const PROXY           = 'https://airtable-proxy.shekharphi785.workers.dev';
-const AT_BASE         = 'appSaGKLSDYFngrJi';
-const AT_CONFIG_TABLE = 'tbluq1UYtX3iL7XU3';
-const AT_USERS_TABLE  = 'tblwVLCPAmuOUUbIi';
-const AT_RESTR_TABLE  = 'tblKF8PT1ni9XHaoE';
-
-const AT_URL_CONFIG = `${PROXY}/v0/${AT_BASE}/${AT_CONFIG_TABLE}`;
-const AT_URL_USERS  = `${PROXY}/v0/${AT_BASE}/${AT_USERS_TABLE}`;
-const AT_URL_RESTR  = `${PROXY}/v0/${AT_BASE}/${AT_RESTR_TABLE}`;
-
-const atHeaders = () => ({ 'Content-Type': 'application/json' });
-
-let ADMIN_UNLOCKED = false, _cloudPin = '', _cloudEmps =[], _allUsers =[], _restrictedEmps =[], _configRecordId = null, _configLoaded = false;
-let SESSION = { name: '', empId: '' };
-
-const svgSun = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
-const svgMoon = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-
-const updateThemeIcon = (isLight) => {
-  $('theme-icon').innerHTML = isLight ? svgMoon : svgSun; 
-};
-
-const toggleMode = () => {
-  const isLight = document.body.getAttribute('data-mode') === 'light';
-  const newMode = isLight ? 'dark' : 'light';
-  document.body.setAttribute('data-mode', newMode);
-  localStorage.setItem('philips_mode', newMode);
-  updateThemeIcon(!isLight);
-};
-
-const setTheme = (theme) => {
-  document.body.setAttribute('data-theme', theme);
-  localStorage.setItem('philips_theme', theme);
-  $('user-dropdown').classList.remove('open');
-};
-
-const initTheme = () => {
-  const savedTheme = localStorage.getItem('philips_theme') || 'default';
-  const savedMode = localStorage.getItem('philips_mode') || 'dark';
-  document.body.setAttribute('data-theme', savedTheme);
-  document.body.setAttribute('data-mode', savedMode);
-  updateThemeIcon(savedMode === 'light');
-};
-
-const toggleUserMenu = (e) => {
-  if(e) e.stopPropagation();
-  $('user-dropdown').classList.toggle('open');
-};
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.user-dropdown-wrapper')) {
-    const d = $('user-dropdown');
-    if (d && d.classList.contains('open')) d.classList.remove('open');
-  }
-});
-
-const loadSession = () => { const s = localStorage.getItem('philips_session'); if(s) try { SESSION = JSON.parse(s); } catch(e){} };
-const saveSession = () => localStorage.setItem('philips_session', JSON.stringify(SESSION));
-const clearSession = () => { SESSION = { name: '', empId: '' }; localStorage.removeItem('philips_session'); };
-
-const loadCloudConfig = async () => {
-  try {
-    const[configData, usersData, restrData] = await Promise.all([
-      fetch(`${AT_URL_CONFIG}?maxRecords=1`, { headers: atHeaders() }).then(r => r.json()),
-      fetch(`${AT_URL_USERS}?maxRecords=100`, { headers: atHeaders() }).then(r => r.json()),
-      fetch(`${AT_URL_RESTR}?maxRecords=100`, { headers: atHeaders() }).then(r => r.json())
-    ]);
-
-    if (configData.records?.length) {
-      const rec = configData.records[0];
-      _configRecordId = rec.id;
-      if (rec.fields.Pin) _cloudPin = String(rec.fields.Pin).trim();
-      if (rec.fields.Emp) _cloudEmps = String(rec.fields.Emp).split(',').filter(Boolean).map(id => ({ id: id.trim(), name: '' }));
-    }
-    if (usersData.records) _allUsers = usersData.records.map(r => ({ empId: (r.fields.empId||'').trim(), name: (r.fields.name||'').trim(), recordId: r.id })).filter(u => u.empId);
-    if (restrData.records) _restrictedEmps = restrData.records.map(r => ({ empId: (r.fields.empId||'').trim(), recordId: r.id })).filter(u => u.empId);
-    
-    _configLoaded = true;
-    if (SESSION.empId) applySession();
-  } catch (err) {
-    console.warn('Airtable load failed:', err);
-    _configLoaded = true;
-  }
-};
-
-const isAllowedUser = empId => isAdminUser(empId) || _allUsers.some(u => u.empId.toLowerCase() === empId.toLowerCase());
-const isRestrictedAllowed = empId => _restrictedEmps.some(u => u.empId.toLowerCase() === empId.toLowerCase());
-const isAdminUser = empId => _cloudEmps.some(e => e.id.toLowerCase() === empId.toLowerCase());
-
-window.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  loadCloudConfig();
-  loadSession();
-  if (SESSION.name && SESSION.empId) {
-    applySession();
-    switchToDashboard();
-  }
-  const today = new Date().toISOString().split('T')[0];
-  $('esc-caseDate').value = today;
-  $('prod-date').value = today;
-});
-
-const doLogin = () => {
-  const name = $('inp-name').value.trim();
-  const emp = $('inp-emp').value.trim().toUpperCase();
-  if (!name) return pToast('Please enter your full name', 'err');
-  if (!emp) return pToast('Please enter your Employee ID', 'err');
-  if (!_configLoaded) return pToast('Loading data, please try again…', 'err');
-  if (!isAllowedUser(emp)) return pToast('Access denied. Your Employee ID is not authorised.', 'err');
-
-  SESSION = { name, empId: emp };
-  saveSession();
-  applySession();
-  switchToDashboard();
-  pToast(`Welcome, ${name}!`, 'ok');
-};
-
-const doLogout = () => {
-  clearSession();
-  $('page-dashboard').classList.remove('active');
-  $('page-login').classList.add('active');
-  $('inp-name').value = '';
-  $('inp-emp').value = '';
-  showPanel('escalation');
-  $('user-dropdown').classList.remove('open');
-};
-
-const applySession = () => {
-  $('dash-name').textContent = SESSION.name;
-  $('dash-emp').textContent = SESSION.empId;
-  $('dash-avatar').textContent = SESSION.name.charAt(0).toUpperCase();
-  $$('.auto-name-txt').forEach(el => el.textContent = SESSION.name);
-  $$('.auto-emp-txt').forEach(el => el.textContent = SESSION.empId);
-  $$('.auto-name').forEach(el => el.value = SESSION.name);
-  $$('.auto-emp').forEach(el => el.value = SESSION.empId);
-  const adminBtn = $('topbar-admin-btn');
-  if (adminBtn) adminBtn.style.display = isAdminUser(SESSION.empId) ? 'block' : 'none';
-};
-
-const switchToDashboard = () => {
-  $('page-login').classList.remove('active');
-  $('page-dashboard').classList.add('active');
-};
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && $('page-login').classList.contains('active')) doLogin();
-});
-
-const showPanel = id => {
-  // Callback removed from restricted array below:
-  if (['productivity', 'cases'].includes(id) && SESSION.empId && !isRestrictedAllowed(SESSION.empId)) 
-    return pToast('Access restricted. Contact your admin.', 'err');
-  if (id === 'admin' && SESSION.empId && !isAdminUser(SESSION.empId)) 
-    return pToast('Admin access denied.', 'err');['escalation','productivity','cases','callback','websites','admin'].forEach(p => {
-    const pnl = $('panel-' + p);
-    if(pnl) pnl.classList.remove('active');
-    const navEl = $('nav-' + p);
-    if (navEl) navEl.classList.remove('active');
-  });
-  
-  const activePnl = $('panel-' + id);
-  if(activePnl) activePnl.classList.add('active');
-  const navActive = $('nav-' + id);
-  if (navActive) navActive.classList.add('active');
-};
-
-$('escalationForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const btn = $('escSubmitBtn');
-  btn.textContent = 'Submitting…';
-  btn.style.opacity = '0.7';
-  btn.disabled = true;
-
-  const caseTypeEl = document.querySelector('input[name="caseType"]:checked');
-  const payload = {
-    agentName: SESSION.name,
-    employeeId: SESSION.empId,
-    caseNumber: $('esc-caseNumber').value,
-    workshop: $('esc-workshop').value,
-    caseDate: $('esc-caseDate').value,
-    escalationReason: $('esc-escalationReason').value,
-    agentRemarks: $('esc-agentRemarks').value,
-    caseType: caseTypeEl ? caseTypeEl.value : '',
-    submittedAt: new Date().toLocaleString()
-  };
-
-  fetch(ESC_SHEET, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-  
-  escToast('✅', 'Escalation submitted successfully!');
-  resetEscalation();
-  btn.textContent = 'Submit Escalation';
-  btn.style.opacity = '1';
-  btn.disabled = false;
-});
-
-const resetEscalation = () => {
-  $('escalationForm').reset();
-  $('esc-caseDate').value = new Date().toISOString().split('T')[0];
-};
-
-const submitProductivity = async () => {
-  const origin = document.querySelector('input[name="prodOrigin"]:checked');
-  const caseNo = $('prod-case').value.trim();
-  const dateVal = $('prod-date').value;
-  const emailV = $('prod-email-addr').value.trim();
-
-  if (!origin) return pToast('Select an origin', 'err');
-  if (!caseNo) return pToast('Enter a case number', 'err');
-  if (!emailV) return pToast('Enter an email address', 'err');
-
-  const btn = $('prodSubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
-
-  const payload = { name: SESSION.name, empId: SESSION.empId, origin: origin.value, caseNumber: caseNo, date: dateVal, email: emailV, timestamp: new Date().toISOString() };
-  fetch(PROD_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-  
-  pToast('Entry submitted successfully!', 'ok');
-  $('prod-case').value = '';
-  $('prod-email-addr').value = '';
-  $$('input[name="prodOrigin"]').forEach(r => r.checked = false);
-  btn.disabled = false;
-  btn.innerHTML = 'Submit Entry &nbsp;→';
-};
-
-let caseEntries =[];
-const submitCase = async () => {
-  const caseId = $('case-id').value.trim();
-  const origin = $('case-origin').value;
-
-  if (!caseId) return pToast('Enter a Case ID', 'err');
-  if (!origin) return pToast('Select an origin', 'err');
-
-  const btn = $('caseSubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
-
-  const entry = { name: SESSION.name, empId: SESSION.empId, caseId, origin, timestamp: new Date().toLocaleString('en-IN') };
-  fetch(CASE_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
-
-  caseEntries.push(entry);
-  renderCaseTable();
-  pToast('✅ Case submitted and logged!', 'ok');
-  $('case-id').value = '';
-  $('case-origin').value = '';
-  btn.disabled = false;
-  btn.innerHTML = 'Submit Case &nbsp;→';
-};
-
-/* Callback Submission */
-$('callbackForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const btn = $('cbSubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
-
-  const payload = {
-    agentName: SESSION.name,
-    empId: SESSION.empId,
-    consumerContact: $('cb-contact').value.trim(),
-    referenceCase: $('cb-case').value.trim(),
-    callBackReason: $('cb-reason').value.trim(),
-    callBackTime: $('cb-time').value,
-    preferredTime: $('cb-pref-time').value,
-    timestamp: new Date().toLocaleString('en-IN')
-  };
-
-  fetch(CALLBACK_SHEET, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-
-  // Assume success immediately (bypassing Google's redirect rejection)
-  pToast('✅ Callback request submitted!', 'ok');
-  $('callbackForm').reset();
-  btn.disabled = false;
-  btn.innerHTML = 'Submit Request &nbsp;→';
-});
-
-let _pt, _et;
-const pToast = (msg, type = '') => {
-  const el = $('portal-toast');
-  el.textContent = msg;
-  el.className = `show ${type}`;
-  clearTimeout(_pt);
-  _pt = setTimeout(() => el.className = '', 3500);
-};
-
-const escToast = (icon, msg) => {
-  $('esc-toast-icon').textContent = icon;
-  $('esc-toast-msg').textContent = msg;
-  $('esc-toast').classList.add('show');
-  clearTimeout(_et);
-  _et = setTimeout(() => $('esc-toast').classList.remove('show'), 3500);
-};
-
-const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-const switchAdminTab = tab => {['admins','users','restricted'].forEach(t => {
-    $(`tab-${t}`).style.display = 'none';
-    $(`tab-btn-${t}`).classList.remove('active');
-  });
-  $(`tab-${tab}`).style.display = 'block';
-  $(`tab-btn-${tab}`).classList.add('active');
-};
-
-const verifyAdminPin = () => {
-  if ($('admin-pin-input').value === _cloudPin) {
-    ADMIN_UNLOCKED = true;
-    $('admin-gate').style.display = 'none';
-    $('admin-dashboard').style.display = 'block';
-    renderEmpList(); renderUsersList(); renderRestrictedList();
-    pToast('Admin unlocked', 'ok');
-  } else {
-    pToast('Incorrect PIN', 'err');
-    $('admin-pin-input').value = '';
-  }
-};
-
-const changeAdminPin = () => {
-  const np = $('new-pin').value.trim();
-  const cp = $('confirm-pin').value.trim();
-  if (!np) return pToast('Enter a new PIN', 'err');
-  if (np !== cp) return pToast('PINs do not match', 'err');
-  _cloudPin = np;
-  if (_configRecordId) {
-    fetch(`${AT_URL_CONFIG}/${_configRecordId}`, { method: 'PATCH', headers: atHeaders(), body: JSON.stringify({ fields: { Pin: np } }) })
-      .then(() => pToast('PIN updated & synced ✓', 'ok'))
-      .catch(() => pToast('PIN changed locally but sync failed', 'err'));
-  }
-  $('new-pin').value = ''; $('confirm-pin').value = '';
-};
-
-const saveAdminEmpsToAirtable = () => {
-  if (!_configRecordId) return;
-  fetch(`${AT_URL_CONFIG}/${_configRecordId}`, { method: 'PATCH', headers: atHeaders(), body: JSON.stringify({ fields: { Emp: _cloudEmps.map(e => e.id).join(',') } }) })
-    .catch(err => console.warn('Admin emp sync failed:', err));
-};
-
-const addAuthorizedEmp = () => {
-  const id = $('new-admin-id').value.trim().toUpperCase();
-  const name = $('new-admin-name').value.trim();
-  if (!id) return pToast('Enter an Employee ID', 'err');
-  if (_cloudEmps.some(e => e.id.toLowerCase() === id.toLowerCase())) return pToast('Already in admin list', 'err');
-  
-  _cloudEmps.push({ id, name: name || '' });
-  saveAdminEmpsToAirtable();
-  $('new-admin-id').value = ''; $('new-admin-name').value = '';
-  renderEmpList(); pToast('Admin added & synced ✓', 'ok');
-};
-
-const removeAuthorizedEmp = id => {
-  _cloudEmps = _cloudEmps.filter(e => e.id !== id);
-  saveAdminEmpsToAirtable();
-  renderEmpList(); pToast('Admin removed & synced ✓', 'ok');
-};
-
-const clearAllEmps = () => {
-  if (!confirm('Remove all admin Employee IDs?')) return;
-  _cloudEmps =[]; saveAdminEmpsToAirtable(); renderEmpList(); pToast('All admins cleared & synced ✓', 'ok');
-};
-
-const renderEmpList = () => {
-  $('emp-count').textContent = _cloudEmps.length;
-  if (!_cloudEmps.length) return $('emp-list').innerHTML = '<div class="admin-empty">No admin employees yet.</div>';
-  $('emp-list').innerHTML = _cloudEmps.map(e => `<div class="admin-emp-row"><div class="admin-emp-info"><div class="admin-emp-id">${e.id}</div>${e.name ? `<div class="admin-emp-name">${e.name}</div>` : ''}</div><button class="admin-remove-btn" data-action="remove-admin" data-id="${e.id}">Remove</button></div>`).join('');
-};
-
-const addPortalUser = () => {
-  const id = $('new-user-id').value.trim().toUpperCase();
-  const name = $('new-user-name').value.trim();
-  if (!id) return pToast('Enter an Employee ID', 'err');
-  if (!name) return pToast('Enter a name', 'err');
-  if (_allUsers.some(u => u.empId.toLowerCase() === id.toLowerCase())) return pToast('Already in portal users', 'err');
-
-  fetch(AT_URL_USERS, { method: 'POST', headers: atHeaders(), body: JSON.stringify({ fields: { empId: id, name } }) })
-    .then(r => r.json()).then(rec => {
-      _allUsers.push({ empId: id, name, recordId: rec.id });
-      $('new-user-id').value = ''; $('new-user-name').value = '';
-      renderUsersList(); pToast('Portal user added & synced ✓', 'ok');
-    }).catch(() => pToast('Failed to add user', 'err'));
-};
-
-const removePortalUser = id => {
-  fetch(`${AT_URL_USERS}/${id}`, { method: 'DELETE', headers: atHeaders() }).then(() => {
-    _allUsers = _allUsers.filter(u => u.recordId !== id);
-    renderUsersList(); pToast('Portal user removed & synced ✓', 'ok');
-  }).catch(() => pToast('Failed to remove user', 'err'));
-};
-
-const renderUsersList = () => {
-  $('users-count').textContent = _allUsers.length;
-  if (!_allUsers.length) return $('users-list').innerHTML = '<div class="admin-empty">No portal users yet.</div>';
-  $('users-list').innerHTML = _allUsers.map(u => `<div class="admin-emp-row"><div class="admin-emp-info"><div class="admin-emp-id">${u.empId}</div>${u.name ? `<div class="admin-emp-name">${u.name}</div>` : ''}</div><button class="admin-remove-btn" data-action="remove-user" data-id="${u.recordId}">Remove</button></div>`).join('');
-};
-
-const addRestrictedUser = () => {
-  const id = $('new-restr-id').value.trim().toUpperCase();
-  if (!id) return pToast('Enter an Employee ID', 'err');
-  if (_restrictedEmps.some(u => u.empId.toLowerCase() === id.toLowerCase())) return pToast('Already in restricted users', 'err');
-
-  fetch(AT_URL_RESTR, { method: 'POST', headers: atHeaders(), body: JSON.stringify({ fields: { empId: id } }) })
-    .then(r => r.json()).then(rec => {
-      _restrictedEmps.push({ empId: id, recordId: rec.id });
-      $('new-restr-id').value = ''; renderRestrictedList(); pToast('Restricted user added & synced ✓', 'ok');
-    }).catch(() => pToast('Failed to add restricted user', 'err'));
-};
-
-const removeRestrictedUser = id => {
-  fetch(`${AT_URL_RESTR}/${id}`, { method: 'DELETE', headers: atHeaders() }).then(() => {
-    _restrictedEmps = _restrictedEmps.filter(u => u.recordId !== id);
-    renderRestrictedList(); pToast('Restricted user removed & synced ✓', 'ok');
-  }).catch(() => pToast('Failed to remove user', 'err'));
-};
-
-const renderRestrictedList = () => {
-  $('restr-count').textContent = _restrictedEmps.length;
-  if (!_restrictedEmps.length) return $('restr-list').innerHTML = '<div class="admin-empty">No restricted users yet.</div>';
-  $('restr-list').innerHTML = _restrictedEmps.map(u => `<div class="admin-emp-row"><div class="admin-emp-info"><div class="admin-emp-id">${u.empId}</div></div><button class="admin-remove-btn" data-action="remove-restr" data-id="${u.recordId}">Remove</button></div>`).join('');
-};
-
-const lockAdmin = () => {
-  ADMIN_UNLOCKED = false;
-  $('admin-gate').style.display = 'block';
-  $('admin-dashboard').style.display = 'none';
-  $('admin-pin-input').value = '';
-  pToast('Admin locked', 'ok');
-};
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && $('panel-admin')?.classList.contains('active') && !ADMIN_UNLOCKED) verifyAdminPin();
-});
-
-document.addEventListener('click', e => {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  const { action, id } = btn.dataset;
-  if (action === 'remove-admin') removeAuthorizedEmp(id);
-  if (action === 'remove-user') removePortalUser(id);
-  if (action === 'remove-restr') removeRestrictedUser(id);
-});
-</script>
 
+        <!-- WEBSITES PANEL -->
+        <div class="form-panel" id="panel-websites">
+          <header class="panel-header">
+            <div class="panel-tag">Websites</div>
+            <h2 class="panel-title">Quick Links</h2>
+            <div class="panel-sub">Frequently used tools and resources — click any card to open.</div>
+          </header>
+          <div class="web-grid">
+            <div class="web-section-label">Login Sites</div>
+            <a href="https://login.aps1.pure.cloud/?rid=DVbq34a3NJKzZWZ3WoxZBNaGWMHGHuKKDeCfSrYQsC4#/authenticate-adv/org/philipsvoicecloudindia"
+              target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l.89-.89a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 18.92z" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Dialer</div>
+                <div class="web-card-url">login.aps1.pure.cloud</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://philipsb2c.lightning.force.com" target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Salesforce</div>
+                <div class="web-card-url">philipsb2c.lightning.force.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://mail.radmintec.com" target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Zimbra</div>
+                <div class="web-card-url">mail.radmintec.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://philips.csod.com/clientimg/philips/welcome/signoff/signoff.htm" target="_blank"
+              rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                  <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Corner Stone</div>
+                <div class="web-card-url">philips.csod.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://hub.challengerinc.com/learn/sign_in?return_to=%2Flearn%2F" target="_blank" rel="noopener"
+              class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="7" />
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Challenger Hub</div>
+                <div class="web-card-url">hub.challengerinc.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+
+            <div class="web-section-label">Spare Parts</div>
+            <a href="https://aalap.com/" target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                  <path d="m3.3 7 8.7 5 8.7-5" />
+                  <path d="M12 22V12" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Aalap</div>
+                <div class="web-card-url">aalap.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://www.sparessale.com/" target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Spares Sale</div>
+                <div class="web-card-url">sparessale.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+
+            <div class="web-section-label">Support Tools</div>
+            <a href="https://www.philips.co.in/content/B2C/en_IN/support-home/warranty/warranty-pe.html" target="_blank"
+              rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Warranty Policy</div>
+                <div class="web-card-url">philips.co.in</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://www.atyourservice.philips.com/Pages/AYSRMS/PostalCodeMapping/default.aspx" target="_blank"
+              rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Pincode Matcher</div>
+                <div class="web-card-url">atyourservice.philips.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://www.philips.co.in/c-w/support-home/service-and-repair" target="_blank" rel="noopener"
+              class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Service Centre Locator</div>
+                <div class="web-card-url">philips.co.in</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://tickets.brainbees.com/login" target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 9a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9Z" />
+                  <path d="M2 9V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4" />
+                  <circle cx="7" cy="13" r="1" />
+                  <circle cx="12" cy="13" r="1" />
+                  <circle cx="17" cy="13" r="1" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">Firstcry</div>
+                <div class="web-card-url">tickets.brainbees.com</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+            <a href="https://consumerhelpline.gov.in/company" target="_blank" rel="noopener" class="web-card">
+              <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18" />
+                  <path d="M3 7v1a3 3 0 0 0 6 0V7m6 0v1a3 3 0 0 0 6 0V7" />
+                  <path d="M9 7v1a3 3 0 0 0 6 0V7" />
+                  <path d="M4 21V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v17" />
+                </svg></div>
+              <div class="web-card-body">
+                <div class="web-card-title">NCH</div>
+                <div class="web-card-url">consumerhelpline.gov.in</div>
+              </div>
+              <div class="web-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- ADMIN PANEL -->
+        <div class="form-panel" id="panel-admin">
+          <header class="panel-header">
+            <div class="panel-tag">Admin</div>
+            <h2 class="panel-title">Authorization Manager</h2>
+            <div class="panel-sub">Manage Admin Users, Portal Users and Restricted Users — all synced to Airtable
+              instantly.</div>
+          </header>
+
+          <!-- Admin PIN gate -->
+          <div id="admin-gate" class="f-card" style="max-width:420px">
+            <div class="f-section-title">Admin Access</div>
+            <div class="f-field">
+              <label class="f-label">Admin PIN <span class="req">*</span></label>
+              <input class="f-input" type="password" id="admin-pin-input" placeholder="Enter admin PIN"
+                autocomplete="off" />
+            </div>
+            <button class="f-btn" onclick="verifyAdminPin()">Unlock &nbsp;→</button>
+            <div style="margin-top:12px;font-size:0.72rem;color:var(--text-muted);text-align:center">PIN is set by the
+              admin — contact your system admin if locked out.</div>
+          </div>
+
+          <!-- Admin dashboard -->
+          <div id="admin-dashboard" style="display:none">
+            <div class="f-card" style="margin-bottom:18px">
+              <div class="f-section-title">Change Admin PIN</div>
+              <div class="f-field-row">
+                <div>
+                  <label class="f-label">New PIN</label>
+                  <input class="f-input" type="password" id="new-pin" placeholder="Enter new PIN" />
+                </div>
+                <div>
+                  <label class="f-label">Confirm PIN</label>
+                  <input class="f-input" type="password" id="confirm-pin" placeholder="Confirm new PIN" />
+                </div>
+              </div>
+              <button class="f-btn" style="margin-top:4px" onclick="changeAdminPin()">Update PIN &nbsp;→</button>
+            </div>
+
+            <div class="f-card">
+              <div
+                style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--border-light);padding-bottom:14px">
+                <button class="admin-tab-btn active" id="tab-btn-admins" onclick="switchAdminTab('admins')">👑 Admin
+                  Users</button>
+                <button class="admin-tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')">👤 Portal
+                  Users</button>
+                <button class="admin-tab-btn" id="tab-btn-restricted" onclick="switchAdminTab('restricted')">🔒
+                  Restricted Users</button>
+                <button class="admin-tab-btn" id="tab-btn-noti" onclick="switchAdminTab('noti')">🔔
+                  Notifications</button>
+              </div>
+
+              <!-- Admins -->
+              <div id="tab-admins">
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">Can log in without being in
+                  Portal Users. Can access Admin panel.</div>
+                <div class="f-field-row" style="margin-bottom:10px">
+                  <div><label class="f-label">Employee ID</label><input class="f-input" type="text" id="new-admin-id"
+                      placeholder="e.g. RM7028777" autocomplete="off" /></div>
+                  <div><label class="f-label">Name (optional)</label><input class="f-input" type="text"
+                      id="new-admin-name" placeholder="e.g. John Doe" autocomplete="off" /></div>
+                </div>
+                <button class="f-btn" style="margin-bottom:18px" onclick="addAuthorizedEmp()">Add Admin &nbsp;→</button>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                  <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Admin Employees</span>
+                  <span id="emp-count" class="f-bdg" style="padding:2px 10px;border-radius:20px;">0</span>
+                </div>
+                <div id="emp-list" class="admin-emp-list"></div>
+                <div
+                  style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);display:flex;gap:10px">
+                  <button class="admin-danger-btn" onclick="clearAllEmps()">Clear All Admins</button>
+                  <button class="admin-lock-btn" onclick="lockAdmin()">Lock Admin</button>
+                </div>
+              </div>
+
+              <!-- Portal Users -->
+              <div id="tab-users" style="display:none">
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">These employees can log in to
+                  the portal. Access: Escalation &amp; Websites only.</div>
+                <div class="f-field-row" style="margin-bottom:10px">
+                  <div><label class="f-label">Employee ID</label><input class="f-input" type="text" id="new-user-id"
+                      placeholder="e.g. RM7033055" autocomplete="off" /></div>
+                  <div><label class="f-label">Name</label><input class="f-input" type="text" id="new-user-name"
+                      placeholder="e.g. Ankit Rawat" autocomplete="off" /></div>
+                </div>
+                <button class="f-btn" style="margin-bottom:18px" onclick="addPortalUser()">Add User &nbsp;→</button>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                  <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Portal Users</span>
+                  <span id="users-count" class="f-bdg" style="padding:2px 10px;border-radius:20px;">0</span>
+                </div>
+                <div id="users-list" class="admin-emp-list"></div>
+              </div>
+
+              <!-- Restricted Users -->
+              <div id="tab-restricted" style="display:none">
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">These employees also get
+                  access to Email Productivity &amp; Case Submission forms.</div>
+                <div class="f-field-row" style="margin-bottom:10px">
+                  <div><label class="f-label">Employee ID</label><input class="f-input" type="text" id="new-restr-id"
+                      placeholder="e.g. RM7032569" autocomplete="off" /></div>
+                </div>
+                <button class="f-btn" style="margin-bottom:18px" onclick="addRestrictedUser()">Add &nbsp;→</button>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                  <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Restricted Users</span>
+                  <span id="restr-count" class="f-bdg" style="padding:2px 10px;border-radius:20px;">0</span>
+                </div>
+                <div id="restr-list" class="admin-emp-list"></div>
+              </div>
+
+              <!-- Notifications -->
+              <div id="tab-noti" style="display:none">
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px">Push notifications to all
+                  users currently logged in.</div>
+                <div class="f-field" style="margin-bottom:10px">
+                  <label class="f-label">Notification Message</label>
+                  <textarea class="f-textarea" id="new-noti-msg" placeholder="Type notification message here..."
+                    style="min-height:80px"></textarea>
+                </div>
+                <button class="f-btn" style="margin-bottom:18px" onclick="pushNotification()">Update
+                  &nbsp;→</button>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                  <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Recent Notifications</span>
+                </div>
+                <div id="admin-noti-list" class="admin-emp-list"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- HELP SUPPORT (AI CHATBOT) -->
+        <div class="form-panel" id="panel-help">
+          <header class="panel-header">
+            <div class="panel-tag">AI Support</div>
+            <h2 class="panel-title">Help Support</h2>
+            <div class="panel-sub">Get instant help from our AI productivity assistant.</div>
+          </header>
+
+          <div class="help-chat-container">
+            <div class="chatbot-header">
+              <div class="chatbot-header-info">
+                <select id="chatbot-model-select" class="chatbot-model-select" onchange="updateSelectedModel()">
+                  <option value="github:Llama-3.3-70B-Instruct">Llama 3.3 70B</option>
+                  <option value="github:gpt-4o">GPT-4o</option>
+                  <option value="github:gpt-4o-mini">GPT-4o Mini</option>
+                  <option value="github:gpt-4o">OpenAI GPT-5 (Preview)</option>
+                </select>
+              </div>
+              <button class="chatbot-action-btn" onclick="clearChatHistory()" title="Clear Chat History">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path
+                    d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2m-6 5v6m4-6v6" />
+                </svg>
+              </button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+              <div class="chatbot-welcome">
+                <div class="chatbot-welcome-icon">
+                  <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                </div>
+                <h3>How can I help you, <span id="chatbot-greet-name">Agent</span>?</h3>
+              </div>
+            </div>
+
+            <div class="chatbot-input-area">
+              <textarea id="chatbot-input" class="chatbot-input" placeholder="Ask me anything…" rows="1"
+                onkeydown="handleChatKey(event)" oninput="autoresizeChatInput(this)"></textarea>
+              <button class="chatbot-send-btn" id="chatbot-send-btn" onclick="sendChatMessage()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <div id="portal-toast"></div>
+  <div id="esc-toast"><span id="esc-toast-icon" style="font-size:16px">✅</span><span
+      id="esc-toast-msg">Submitted!</span></div>
+
+  <script src="script.js"></script>
 </body>
+
 </html>
