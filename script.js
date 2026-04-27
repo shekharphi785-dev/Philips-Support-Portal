@@ -281,7 +281,7 @@ $('escalationForm').addEventListener('submit', async e => {
 
   fetch(ESC_SHEET, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
-  escToast('✅', 'Escalation submitted successfully!');
+  pToast('Escalation submitted successfully!', 'ok');
   resetEscalation();
   btn.textContent = 'Submit Escalation';
   btn.style.opacity = '1';
