@@ -11,7 +11,7 @@ const AI_PROXY_URL = 'https://aiproxy.shekharphi785.workers.dev';
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
-const ESC_SHEET = 'https://hook.eu1.make.com/poqodcqm5h3khmskhvwga9ylh82n9pfj';
+const ESC_SHEET = 'https://default1a407a2d76754d178692b3ac285306.e4.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/17faf03f8a33494fb84aee9fade68883/triggers/manual/paths/invoke?api-version=1';
 const PROD_SHEET = 'https://script.google.com/macros/s/AKfycbw-fm5b_bjvFD8FR2-sHCRNTW-mxqYFSCVTf326u6e2TMc-ewN1Bhn3D-hj2_HgllIcog/exec';
 const CASE_SHEET = 'https://script.google.com/macros/s/AKfycby50lm964MC3UKXDdDORr1pS93pdmGtqB5-NQEstVR6iYQHGErjzps55QRLEMGeUObSMA/exec';
 const CALLBACK_SHEET = 'https://script.google.com/macros/s/AKfycbyWsISnlU3TzYKgxOSoB8gpVznTlbSHYJLNYTbXWcI_DfJ63jjlGegTjfli_NbxoKyaoQ/exec';
