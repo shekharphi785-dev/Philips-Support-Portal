@@ -7,7 +7,7 @@ const AI_PROXY_URL = 'https://aiproxy.shekharphi785.workers.dev';
 // const OPENAI_API_KEY = '';
 // const DEEPSEEK_API_KEY = '';
 
-// ───────────────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
@@ -32,7 +32,7 @@ const atHeaders = () => ({ 'Content-Type': 'application/json' });
 let ADMIN_UNLOCKED = false, _cloudPin = '', _cloudEmps = [], _allUsers = [], _restrictedEmps = [], _configRecordId = null, _configLoaded = false;
 let SESSION = { name: '', empId: '' };
 
-const svgSun = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+const svgSun = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"/></svg>`;
 const svgMoon = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
 
 const updateThemeIcon = (isLight) => {
@@ -148,6 +148,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   $('esc-caseDate').value = today;
   $('prod-date').value = today;
+  $('prod-date-ndr').value = today;
 
   setInterval(pollNotifications, 10000); // Polling every 10 seconds to avoid hitting Google limits
   renderNotifications();
@@ -293,27 +294,101 @@ const resetEscalation = () => {
   $('esc-caseDate').value = new Date().toISOString().split('T')[0];
 };
 
+// Update productivity form fields based on origin selection
+const updateProdFields = () => {
+  const ndrRadio = $('prod-ndr');
+  const ndrFields = $('ndr-fields');
+  const regularFields = $('regular-prod-fields');
+
+  if (ndrRadio && ndrRadio.checked) {
+    // Show NDR fields, hide regular fields
+    ndrFields.style.display = 'block';
+    regularFields.style.display = 'none';
+  } else {
+    // Show regular fields, hide NDR fields
+    ndrFields.style.display = 'none';
+    regularFields.style.display = 'block';
+  }
+};
+
 const submitProductivity = async () => {
   const origin = document.querySelector('input[name="prodOrigin"]:checked');
-  const caseNo = $('prod-case').value.trim();
-  const dateVal = $('prod-date').value;
-  const emailV = $('prod-email-addr').value.trim();
 
   if (!origin) return pToast('Select an origin', 'err');
-  if (!caseNo) return pToast('Enter a case number', 'err');
-  if (!emailV) return pToast('Enter an email address', 'err');
 
   const btn = $('prodSubmitBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
 
-  const payload = { name: SESSION.name, empId: SESSION.empId, origin: origin.value, caseNumber: caseNo, date: dateVal, email: emailV, timestamp: new Date().toISOString() };
+  let payload;
+
+  if (origin.value === 'NDR') {
+    // NDR submission
+    const awb = $('prod-awb').value.trim();
+    const dateVal = $('prod-date-ndr').value;
+    const remarks = $('prod-ndr-remarks').value.trim();
+
+    if (!awb) {
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Entry &nbsp;→';
+      return pToast('Enter an AWB number', 'err');
+    }
+    if (!remarks) {
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Entry &nbsp;→';
+      return pToast('Enter NDR remarks', 'err');
+    }
+
+    payload = {
+      name: SESSION.name,
+      empId: SESSION.empId,
+      origin: origin.value,
+      awbNumber: awb,
+      ndrRemarks: remarks,
+      date: dateVal,
+      timestamp: new Date().toISOString()
+    };
+
+    // Clear NDR fields after submission
+    $('prod-awb').value = '';
+    $('prod-ndr-remarks').value = '';
+  } else {
+    // Regular submission (Web, Email, Eshop)
+    const caseNo = $('prod-case').value.trim();
+    const dateVal = $('prod-date').value;
+    const emailV = $('prod-email-addr').value.trim();
+
+    if (!caseNo) {
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Entry &nbsp;→';
+      return pToast('Enter an Order ID', 'err');
+    }
+    if (!emailV) {
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Entry &nbsp;→';
+      return pToast('Enter an email address', 'err');
+    }
+
+    payload = {
+      name: SESSION.name,
+      empId: SESSION.empId,
+      origin: origin.value,
+      caseNumber: caseNo,
+      date: dateVal,
+      email: emailV,
+      timestamp: new Date().toISOString()
+    };
+
+    // Clear regular fields after submission
+    $('prod-case').value = '';
+    $('prod-email-addr').value = '';
+  }
+
   fetch(PROD_SHEET, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
   pToast('Entry submitted successfully!', 'ok');
-  $('prod-case').value = '';
-  $('prod-email-addr').value = '';
   $$('input[name="prodOrigin"]').forEach(r => r.checked = false);
+  updateProdFields();
   btn.disabled = false;
   btn.innerHTML = 'Submit Entry &nbsp;→';
 };
@@ -331,8 +406,11 @@ const submitCase = async () => {
   btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
 
   const entry = { name: SESSION.name, empId: SESSION.empId, caseId, origin, timestamp: new Date().toLocaleString('en-IN') };
+  
+  // Send to backend immediately
   fetch(CASE_SHEET, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry) });
 
+  // Show success and reset immediately (don't wait for response)
   caseEntries.push(entry);
   renderCaseTable();
   pToast('✅ Case submitted and logged!', 'ok');
@@ -368,6 +446,24 @@ $('callbackForm').addEventListener('submit', async e => {
   btn.disabled = false;
   btn.innerHTML = 'Submit Request &nbsp;→';
 });
+
+const renderCaseTable = () => {
+  if (!caseEntries.length) return;
+  const wrap = $('caseTableWrap');
+  const body = $('caseTableBody');
+  const cnt = $('caseCnt');
+
+  wrap.style.display = 'block';
+  cnt.textContent = caseEntries.length;
+  body.innerHTML = caseEntries.map((entry, i) => `
+    <div class="f-table-row">
+      <div class="f-table-cell">${i + 1}</div>
+      <div class="f-table-cell">${entry.caseId}</div>
+      <div class="f-table-cell">${entry.origin}</div>
+      <div class="f-table-cell" style="font-size:0.75rem;color:var(--text-muted)">${entry.timestamp}</div>
+    </div>
+  `).join('');
+};
 
 const switchAdminTab = tab => {
   ['admins', 'users', 'restricted', 'noti'].forEach(t => {
@@ -692,11 +788,11 @@ const deleteNotification = async (id) => {
   }
 };
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 // CHATBOT — Gemini-powered Philips Support AI
-// ═══════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 
-const CHAT_SYSTEM_PROMPT = `You are a helpful, professional AI assistant. You help users with any tasks they ask — writing emails, summarizing information, answering questions, drafting messages, explaining concepts, or general productivity tasks. Keep your answers clear, concise, and friendly.
+const CHAT_SYSTEM_PROMPT = `You are a helpful, professional AI assistant. You help users with any tasks they ask — writing emails, summarizing information, answering questions, drafting messages, or analyzing data. Be concise, friendly, and professional.
 
 You are currently assisting {{AGENT_NAME}} (ID: {{AGENT_ID}}).`;
 
