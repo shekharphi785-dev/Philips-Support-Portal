@@ -73,7 +73,7 @@
         </button>
 
         <button id="topbar-admin-btn" onclick="showPanel('admin')"
-          style="display:none;background:var(--icon-bg);border:1px solid var(--border-light);color:var(--primary);padding:6px 14px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointe[...]
+          style="display:none;background:var(--icon-bg);border:1px solid var(--border-light);color:var(--primary);padding:6px 14px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer">👑 Admin</button>
 
         <div class="user-dropdown-wrapper" id="noti-wrapper">
           <button id="noti-btn" class="theme-btn" onclick="toggleNotiMenu(event)" title="Notifications"
@@ -84,7 +84,7 @@
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
             <span id="noti-badge"
-              style="position:absolute;top:-2px;right:-2px;background:var(--danger-text);color:#fff;font-size:0.55rem;font-weight:bold;border-radius:50%;width:14px;height:14px;display:none;align-i[...]
+              style="position:absolute;top:-2px;right:-2px;background:var(--danger-text);color:#fff;font-size:0.55rem;font-weight:bold;border-radius:50%;width:14px;height:14px;display:none;align-items:center;justify-content:center"></span>
           </button>
           <div class="user-dropdown" id="noti-dropdown" style="width:280px">
             <div class="dropdown-header" style="display:flex;justify-content:space-between;align-items:center">
@@ -178,8 +178,7 @@
             <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path
-                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0[...]
-                </path>
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81"></path>
               </svg></div>
             <span>Call Back</span>
           </div>
@@ -316,54 +315,29 @@
             <div class="f-field" style="margin-bottom:15px">
               <label class="f-label">Origin <span class="req">*</span></label>
               <div class="f-radio-group">
-                <div class="f-radio-opt"><input type="radio" id="prod-web" name="prodOrigin" value="Web" onchange="updateProdFields()" /><label
+                <div class="f-radio-opt"><input type="radio" id="prod-web" name="prodOrigin" value="Web" /><label
                     for="prod-web"><span class="f-radio-dot"></span>Web</label></div>
-                <div class="f-radio-opt"><input type="radio" id="prod-email" name="prodOrigin" value="Email" onchange="updateProdFields()" /><label
+                <div class="f-radio-opt"><input type="radio" id="prod-email" name="prodOrigin" value="Email" /><label
                     for="prod-email"><span class="f-radio-dot"></span>Email</label></div>
-                <div class="f-radio-opt"><input type="radio" id="prod-eshop" name="prodOrigin" value="Eshop" onchange="updateProdFields()" /><label
+                <div class="f-radio-opt"><input type="radio" id="prod-eshop" name="prodOrigin" value="Eshop" /><label
                     for="prod-eshop"><span class="f-radio-dot"></span>Eshop</label></div>
-                <div class="f-radio-opt"><input type="radio" id="prod-ndr" name="prodOrigin" value="NDR" onchange="updateProdFields()" /><label
-                    for="prod-ndr"><span class="f-radio-dot"></span>NDR</label></div>
               </div>
             </div>
-            
-            <!-- Conditional Fields for NDR -->
-            <div id="ndr-fields" style="display:none; border: 1px solid var(--border-light); border-radius: 8px; padding: 15px; margin-bottom: 15px; background: var(--icon-bg);">
-              <div class="f-field-row">
-                <div>
-                  <label class="f-label">AWB Number <span class="req">*</span></label>
-                  <input class="f-input" type="text" id="prod-awb" placeholder="Enter AWB number" autocomplete="off" />
-                </div>
-                <div>
-                  <label class="f-label">Date <span class="req">*</span></label>
-                  <input class="f-input" type="date" id="prod-date-ndr" />
-                </div>
+            <div class="f-field-row">
+              <div>
+                <label class="f-label">Case Number <span class="req">*</span></label>
+                <input class="f-input" type="text" id="prod-case" autocomplete="off" />
               </div>
-              <div class="f-field">
-                <label class="f-label">NDR Remarks <span class="req">*</span></label>
-                <textarea class="f-input" id="prod-ndr-remarks" placeholder="Enter NDR remarks..." style="min-height: 80px; resize: vertical;"></textarea>
+              <div>
+                <label class="f-label">Date <span class="req">*</span></label>
+                <input class="f-input" type="date" id="prod-date" />
               </div>
             </div>
-
-            <!-- Regular Fields (Hidden for NDR) -->
-            <div id="regular-prod-fields">
-              <div class="f-field-row">
-                <div>
-                  <label class="f-label">Order ID <span class="req" id="case-label-req">*</span></label>
-                  <input class="f-input" type="text" id="prod-case" placeholder="e.g. ORD-20240001" autocomplete="off" />
-                </div>
-                <div>
-                  <label class="f-label">Date <span class="req">*</span></label>
-                  <input class="f-input" type="date" id="prod-date" />
-                </div>
-              </div>
-              <div class="f-field">
-                <label class="f-label">Email Address <span class="req">*</span></label>
-                <input class="f-input" type="email" id="prod-email-addr" placeholder="e.g. name@example.com"
-                  autocomplete="off" />
-              </div>
+            <div class="f-field">
+              <label class="f-label">Email Address <span class="req">*</span></label>
+              <input class="f-input" type="email" id="prod-email-addr" placeholder="e.g. name@example.com"
+                autocomplete="off" />
             </div>
-
             <button class="f-btn" id="prodSubmitBtn" onclick="submitProductivity()">Submit Entry &nbsp;→</button>
           </div>
         </div>
@@ -496,7 +470,7 @@
               <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path
-                    d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3[...]
+                    d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81 2 2 0 0 0 1.72 1.72 12.84 12.84 0 0 0 2.81.7 2 2 0 0 0 1.72-1.72 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 0-1.72-1.72 12.84 12.84 0 0 0-2.81-.7 2 2 0 0 0-1.72 1.72 12.84 12.84 0 0 0-.7 2.81"></path>
                 </svg></div>
               <div class="web-card-body">
                 <div class="web-card-title">Dialer</div>
@@ -513,7 +487,7 @@
               <div class="web-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path
-                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                 </svg></div>
               <div class="web-card-body">
                 <div class="web-card-title">Salesforce</div>
