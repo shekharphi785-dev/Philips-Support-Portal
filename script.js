@@ -1,7 +1,7 @@
 // 🛡️ SECURITY: API Keys should be stored in a Backend Proxy (e.g., Cloudflare Workers)
 // Leave these EMPTY when pushing to GitHub. 
 // Once you deploy your proxy, paste the URL below.
-const AI_PROXY_URL = 'https://aiproxy.shekharphi785.workers.dev';
+const AI_PROXY_URL = '';
 // const GROQ_API_KEY = '';
 // const GITHUB_TOKEN = '';
 // const OPENAI_API_KEY = '';
@@ -148,13 +148,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   $('esc-caseDate').value = today;
   $('prod-date').value = today;
-  $('prod-date-ndr').value = today;
 
   setInterval(pollNotifications, 10000); // Polling every 10 seconds to avoid hitting Google limits
   renderNotifications();
 });
-
-
 
 const doLogin = () => {
   const nameEl = $('inp-name');
@@ -294,101 +291,36 @@ const resetEscalation = () => {
   $('esc-caseDate').value = new Date().toISOString().split('T')[0];
 };
 
-// Update productivity form fields based on origin selection
-const updateProdFields = () => {
-  const ndrRadio = $('prod-ndr');
-  const ndrFields = $('ndr-fields');
-  const regularFields = $('regular-prod-fields');
-
-  if (ndrRadio && ndrRadio.checked) {
-    // Show NDR fields, hide regular fields
-    ndrFields.style.display = 'block';
-    regularFields.style.display = 'none';
-  } else {
-    // Show regular fields, hide NDR fields
-    ndrFields.style.display = 'none';
-    regularFields.style.display = 'block';
-  }
-};
-
 const submitProductivity = async () => {
+  const caseNo = $('prod-case').value.trim();
+  const emailV = $('prod-email-addr').value.trim();
+  const dateVal = $('prod-date').value;
   const origin = document.querySelector('input[name="prodOrigin"]:checked');
 
   if (!origin) return pToast('Select an origin', 'err');
+  if (!caseNo) return pToast('Enter a Case Number', 'err');
+  if (!emailV) return pToast('Enter an email address', 'err');
 
   const btn = $('prodSubmitBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
+  btn.innerHTML = 'Submitting…';
 
-  let payload;
-
-  if (origin.value === 'NDR') {
-    // NDR submission
-    const awb = $('prod-awb').value.trim();
-    const dateVal = $('prod-date-ndr').value;
-    const remarks = $('prod-ndr-remarks').value.trim();
-
-    if (!awb) {
-      btn.disabled = false;
-      btn.innerHTML = 'Submit Entry &nbsp;→';
-      return pToast('Enter an AWB number', 'err');
-    }
-    if (!remarks) {
-      btn.disabled = false;
-      btn.innerHTML = 'Submit Entry &nbsp;→';
-      return pToast('Enter NDR remarks', 'err');
-    }
-
-    payload = {
-      name: SESSION.name,
-      empId: SESSION.empId,
-      origin: origin.value,
-      awbNumber: awb,
-      ndrRemarks: remarks,
-      date: dateVal,
-      timestamp: new Date().toISOString()
-    };
-
-    // Clear NDR fields after submission
-    $('prod-awb').value = '';
-    $('prod-ndr-remarks').value = '';
-  } else {
-    // Regular submission (Web, Email, Eshop)
-    const caseNo = $('prod-case').value.trim();
-    const dateVal = $('prod-date').value;
-    const emailV = $('prod-email-addr').value.trim();
-
-    if (!caseNo) {
-      btn.disabled = false;
-      btn.innerHTML = 'Submit Entry &nbsp;→';
-      return pToast('Enter an Order ID', 'err');
-    }
-    if (!emailV) {
-      btn.disabled = false;
-      btn.innerHTML = 'Submit Entry &nbsp;→';
-      return pToast('Enter an email address', 'err');
-    }
-
-    payload = {
-      name: SESSION.name,
-      empId: SESSION.empId,
-      origin: origin.value,
-      caseNumber: caseNo,
-      date: dateVal,
-      email: emailV,
-      timestamp: new Date().toISOString()
-    };
-
-    // Clear regular fields after submission
-    $('prod-case').value = '';
-    $('prod-email-addr').value = '';
-  }
+  const payload = {
+    name: SESSION.name,
+    empId: SESSION.empId,
+    origin: origin.value,
+    caseNumber: caseNo,
+    date: dateVal,
+    email: emailV,
+    timestamp: new Date().toISOString()
+  };
 
   fetch(PROD_SHEET, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
   pToast('Entry submitted successfully!', 'ok');
+  $('prod-case').value = '';
+  $('prod-email-addr').value = '';
   $$('input[name="prodOrigin"]').forEach(r => r.checked = false);
-  updateProdFields();
   btn.disabled = false;
   btn.innerHTML = 'Submit Entry &nbsp;→';
 };
@@ -403,17 +335,15 @@ const submitCase = async () => {
 
   const btn = $('caseSubmitBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
+  btn.innerHTML = 'Submitting…';
 
   const entry = { name: SESSION.name, empId: SESSION.empId, caseId, origin, timestamp: new Date().toLocaleString('en-IN') };
   
-  // Send to backend immediately
   fetch(CASE_SHEET, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry) });
 
-  // Show success and reset immediately (don't wait for response)
   caseEntries.push(entry);
   renderCaseTable();
-  pToast('✅ Case submitted and logged!', 'ok');
+  pToast('Case submitted successfully!', 'ok');
   $('case-id').value = '';
   $('case-origin').value = '';
   btn.disabled = false;
@@ -425,7 +355,7 @@ $('callbackForm').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = $('cbSubmitBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Submitting…';
+  btn.innerHTML = 'Submitting…';
 
   const payload = {
     agentName: SESSION.name,
@@ -440,8 +370,7 @@ $('callbackForm').addEventListener('submit', async e => {
 
   fetch(CALLBACK_SHEET, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
-  // Assume success immediately (bypassing Google's redirect rejection)
-  pToast('✅ Callback request submitted!', 'ok');
+  pToast('Callback request submitted!', 'ok');
   $('callbackForm').reset();
   btn.disabled = false;
   btn.innerHTML = 'Submit Request &nbsp;→';
@@ -673,7 +602,7 @@ const pushNotification = async () => {
   const btn = document.querySelector('#tab-noti .f-btn');
   const origText = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<span class="f-spinner"></span>Updating…';
+  btn.innerHTML = 'Updating…';
 
   try {
     // Send to Google Sheet
@@ -794,7 +723,7 @@ const deleteNotification = async (id) => {
 
 const CHAT_SYSTEM_PROMPT = `You are a helpful, professional AI assistant. You help users with any tasks they ask — writing emails, summarizing information, answering questions, drafting messages, or analyzing data. Be concise, friendly, and professional.
 
-You are currently assisting {{AGENT_NAME}} (ID: {{AGENT_ID}}).`;
+You are currently assisting {{AGENT_NAME}} (ID: {{AGENT_ID}})`;
 
 const CHAT_LS_KEY = 'philips_chat_history';
 const CHAT_MODEL_KEY = 'philips_chat_model';
@@ -832,9 +761,6 @@ const restoreChatUI = () => {
   });
 };
 
-
-
-
 const clearChatHistory = () => {
   if (!confirm('Clear all chat history?')) return;
   chatHistory = [];
@@ -862,9 +788,6 @@ const sendChatMessage = async () => {
   // Identify selected model and provider
   const fullModelValue = $('chatbot-model-select').value; // e.g. "groq:model" or "github:model"
   const [provider, modelId] = fullModelValue.split(':');
-
-
-
 
   // Add user message to UI and history
   appendChatMessage('user', userMsg);
@@ -926,7 +849,6 @@ const sendChatMessage = async () => {
     }
 
     const data = await res.json();
-
 
     if (!res.ok || data.error) {
       let errDetail = 'Unknown API Error';
